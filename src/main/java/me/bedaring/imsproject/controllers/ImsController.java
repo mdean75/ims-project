@@ -1,8 +1,10 @@
 package me.bedaring.imsproject.controllers;
 
 import me.bedaring.imsproject.models.AssignedGroup;
+import me.bedaring.imsproject.models.Category;
 import me.bedaring.imsproject.models.Severity;
 import me.bedaring.imsproject.models.Ticket;
+import me.bedaring.imsproject.models.data.CategoryDao;
 import me.bedaring.imsproject.models.data.GroupDao;
 import me.bedaring.imsproject.models.data.ImsDao;
 import me.bedaring.imsproject.models.data.SeverityDao;
@@ -27,6 +29,9 @@ public class ImsController {
 
     @Autowired
     private SeverityDao severityDao;
+
+    @Autowired
+    private CategoryDao categoryDao;
 
 
     @RequestMapping(value="")
@@ -62,25 +67,29 @@ public class ImsController {
         model.addAttribute("ticket", new Ticket());
         model.addAttribute("groups", groupDao.findAll());
         model.addAttribute("severities", severityDao.findAll());
+        model.addAttribute("categories", categoryDao.findAll());
         return "ticket/create";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public String processCreateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors,
                                       @RequestParam int assignedGroup, @RequestParam int severity,
-                                      Model model) {
+                                      @RequestParam int categoryMain, Model model) {
 
         if(errors.hasErrors()) {
             model.addAttribute("title", "IMS - Create Ticket");
             model.addAttribute("groups", groupDao.findAll());
             model.addAttribute("severities", severityDao.findAll());
+            model.addAttribute("categories", categoryDao.findAll());
             return "ticket/create";
         }
 
         Optional<AssignedGroup> group = groupDao.findById(assignedGroup);
         Optional<Severity> displaySeverity = severityDao.findById(severity);
+        Optional<Category> category = categoryDao.findById(categoryMain);
         newTicket.setAssignedGroup(group);
         newTicket.setSeverity(displaySeverity);
+        newTicket.setCategoryMain(category);
         imsDao.save(newTicket);
         return "redirect:/ticket/main";
     }

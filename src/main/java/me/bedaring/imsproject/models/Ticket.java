@@ -15,9 +15,8 @@ public class Ticket {
     @GeneratedValue
     private int id;
 
-    @NotNull(message = "Required field")
-    @Size(min=1, message = "Field cannot be empty")
-    private String categoryMain;
+    @ManyToOne
+    private Category categoryMain;
     @NotNull
     @Size(min=1, message = "Field cannot be empty")
     private String categorySub;
@@ -53,7 +52,7 @@ public class Ticket {
     @Size(min=1, message = "Field cannot be empty")
     private String locationDetail;
 
-    public Ticket(String categoryMain, String categorySub, String categoryDetail, String title,
+    public Ticket(Category categoryMain, String categorySub, String categoryDetail, String title,
                   String description, AssignedGroup assignedGroup, String assignedPerson, Severity severity,
                   String requestorName, String requestorPhone, String requestorEmail, String location,
                   String locationDetail) {
@@ -79,11 +78,11 @@ public class Ticket {
         return id;
     }
 
-    public String getCategoryMain() {
+    public Category getCategoryMain() {
         return categoryMain;
     }
 
-    public void setCategoryMain(String categoryMain) {
+    public void setCategoryMain(Category categoryMain) {
         this.categoryMain = categoryMain;
     }
 
@@ -188,5 +187,8 @@ public class Ticket {
     }
 
     public void setSeverity(Optional<Severity> displaySeverity) {
+    }
+
+    public void setCategoryMain(Optional<Category> category) {
     }
 }

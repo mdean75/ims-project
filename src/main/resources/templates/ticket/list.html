@@ -50,7 +50,7 @@
                     <tr th:each="ticket : ${tickets}">
                         <td><a th:href="@{/ticket/view/{id}(id=${ticket.id})}"><span th:text="${ticket.id}"></span> </a></td>
                         <td th:text="${ticket.title}"></td>
-                        <td th:text="${ticket.categoryDetail}">Building</td>
+                        <td th:text="${ticket.categoryMain.categoryName}">Building</td>
                         <td th:text="${ticket.assignedGroup.groupName}">Joe Smith</td>
                         <td th:text="${ticket.severity.severityName}">Open</td>
                         <td th:text="${ticket.location}"></td>

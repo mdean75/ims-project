@@ -32,11 +32,12 @@
 
                             <div class="form-group col">
 
-                                <select class="custom-select" th:field="*{categoryMain}">
+                                <select class="custom-select" name="categoryMain">
                                     <option value="">Select Category</option>
-                                    <option value="Maintenance">Maintenance</option>
-                                    <option value="IT">IT</option>
-                                    <option value="Training">Training</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.categoryName}"></option>
+
                                 </select>
                                 <small style="color: red;" th:errors="*{categoryMain}"></small>
                             </div>
