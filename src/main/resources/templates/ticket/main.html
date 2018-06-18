@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title>Incident Management System Main</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+<body>
+<div class="container" id="top">
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
+            <div class="card-body text-dark mb-3">
+                <h1 class="text-center">Incident Management System</h1>
+                <div class="row justify-content-center">
+                    <div class="message col-md-6">
+
+                        <p class="text-center">Tuesday February 12, 2018</p></hr>
+                        <a href="create"> <button class="btn btn-outline-primary">New Ticket</button></a>
+                        <a href="list"><button class="btn btn-outline-primary">List Tickets</button></a>
+                        <button class="btn btn-warning">Reporting</button></br></br>
+
+                        <form method="get" action="/ticket/view/${id}">
+                            <div class="form-row justify-content-center">
+                                <div class="col">
+                                    <label for="ticket-num">Lookup Ticket</label>
+                                    <input class="form-control" type="text" name="id" id="ticket-num" placeholder="Ticket Number" />
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <label>&nbsp</label>
+                                    <input class="btn btn-outline-secondary form-control align-top" type="submit" value="Lookup" />
+                                </div>
+                            </div>
+                        </form>
+                        </br></br>
+
+                        <button class="btn btn-outline-success">Update Profile</button>
+                        <button class="btn btn-outline-danger">Admin Functions</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

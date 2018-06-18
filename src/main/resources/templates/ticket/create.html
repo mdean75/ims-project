@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www/thymeleaf.org">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title>Incident Management System Create Ticket</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+<body>
+<div class="container" id="top">
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
+            <div class="card-body text-dark mb-3">
+                <h1 class="text-center">Incident Management System</h1>
+                <h2 class="text-center">Ticket Entry</h2>
+                <div class="row justify-content-center">
+                    <div class="message col-md-6">
+
+                        <p class="text-center">Tuesday February 12, 2018</p></hr>
+                    </div>
+
+                </div>
+                <div class="">
+                    <form method="post" th:object="${ticket}">
+                        <div class="form-row">
+                            <div class="col">
+                                <label>Select Incident type</label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+
+                            <div class="form-group col">
+
+                                <select class="custom-select" th:field="*{categoryMain}">
+                                    <option value="">Select Category</option>
+                                    <option value="Maintenance">Maintenance</option>
+                                    <option value="IT">IT</option>
+                                    <option value="Training">Training</option>
+                                </select>
+                                <small style="color: red;" th:errors="*{categoryMain}"></small>
+                            </div>
+                            <div class="form-group col">
+                                <select class="custom-select" th:field="*{categorySub}">
+                                    <option value="">Select Sub-Category</option>
+                                    <option value="Building">Building</option>
+                                    <option value="Ambulance">Ambulance</option>
+                                    <option value="Network">Network</option>
+                                    <option value="Truck Computer">Truck computer</option>
+                                </select>
+                                <small style="color: red;" th:errors="*{categorySub}"></small>
+                            </div>
+                            <div class="form-group col">
+                                <select class="custom-select" th:field="*{categoryDetail}">
+                                    <option value="">Select Detail-Category</option>
+                                    <option value="Plumbing">Plumbing</option>
+                                    <option value="Lighting">Lighting</option>
+                                    <option value="Warning indicator">Warning indicator</option>
+                                    <option value="Air conditioning">Air conditioning</option>
+                                </select>
+                                <small style="color: red;" th:errors="*{categoryDetail}"></small>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <label>Incident title/short description</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <input type="text" class="form-control" th:field="*{title}" />
+                                <small style="color: red;" th:errors="*{title}"></small>
+                            </div>
+
+
+                        </div>
+                        <div class="form-row">
+                            <label>Incident detail</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <textarea class="form-control" rows="5" th:field="*{description}"></textarea>
+                                <small style="color: red;" th:errors="*{description}"></small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Assign to</label>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <select class="custom-select" name="assignedGroup">
+                                    <option value="">Select Group</option>
+                                    <option th:each="group : ${groups}"
+                                            th:value="${group.id}"
+                                            th:text="${group.groupName}">
+
+
+                                    </option>
+
+                                </select>
+                                <small style="color: red;" th:errors="*{assignedGroup}"></small>
+                            </div>
+                            <div class="form-group col">
+                                <select class="custom-select" th:field="*{assignedPerson}">
+                                    <option value="">Select team member</option>
+                                    <option value="Joe">Joe Smith</option>
+                                    <option value="John">John Stewart</option>
+                                    <option value="George">George Constanza</option>
+                                    <option value="Jerry">Jerry Seinfeld</option>
+                                </select>
+                                <small style="color: red;" th:errors="*{assignedPerson}"></small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Business/Operations Impact</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <select class="custom-select" name="severity">
+                                    <option value="">Select Impact Severity</option>
+                                    <option th:each="displaySeverity : ${severities}"
+                                            th:value="${displaySeverity.id}"
+                                            th:text="${displaySeverity.severityName}"></option>
+
+                                </select>
+                                <small style="color: red;" th:errors="*{severity}"></small>
+                            </div>
+
+                        </div>
+                        <p>Requestor information</p>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label class="small">Requester name</label>
+                                <input type="text" class="form-control" th:field="*{requestorName}" />
+                                <small style="color: red;" th:errors="*{requestorName}"></small>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="small">Requester phone</label>
+                                <input type="text" class="form-control" th:field="*{requestorPhone}" />
+                                <small style="color: red;" th:errors="*{requestorPhone}"></small>
+                            </div>
+                            <div class="form-group col">
+                                <label class="small">Requester email</label>
+                                <input type="text" class="form-control" th:field="*{requestorEmail}" />
+                                <small style="color: red;" th:errors="*{requestorEmail}"></small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label class="small">Location of incident</label>
+                                <input type="text" class="form-control" th:field="*{location}" />
+                                <small style="color: red;" th:errors="*{location}"></small>
+                            </div>
+                            <div class="form-group col">
+                                <label class="small">Sub location</label>
+                                <input type="text" class="form-control" th:field="*{locationDetail}" />
+                                <small style="color: red;" th:errors="*{locationDetail}"></small>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="margin: auto;">
+                                <input type="submit" class="btn btn-danger" value="Create Ticket" />
+                                <a href="main" class="btn btn-info">Cancel </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

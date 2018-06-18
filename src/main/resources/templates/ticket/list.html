@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fh-3.1.3/r-2.2.1/datatables.min.css"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+
+<div class="container" id="top">
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-10 col-md-8 bg-light">
+            <div class="card-body text-dark mb-3">
+
+                <h1 class="text-center">Incident Management System</h1></br>
+                <h2 class="text-center">Ticket List</h2></br>
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                        <button class="btn btn-outline-primary col-xs-12 col-md-3">My tickets</button>
+                        <button class="btn btn-outline-primary col-xs-12 col-md-5">My team's tickets</button>
+                        <button class="btn btn-outline-primary col-xs-12 col-md-3">All tickets</button>
+                    </div>
+                </div></br>
+
+                <table id="example" class="display table-responsive" style="width:100%;">
+                    <thead>
+                    <tr>
+                        <th>ID #</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Assigned to</th>
+                        <th>Severity</th>
+                        <th>Location</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ticket : ${tickets}">
+                        <td><a th:href="@{/ticket/view/{id}(id=${ticket.id})}"><span th:text="${ticket.id}"></span> </a></td>
+                        <td th:text="${ticket.title}"></td>
+                        <td th:text="${ticket.categoryDetail}">Building</td>
+                        <td th:text="${ticket.assignedGroup.groupName}">Joe Smith</td>
+                        <td th:text="${ticket.severity.severityName}">Open</td>
+                        <td th:text="${ticket.location}"></td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+                </br>
+                <a href="main"><button class="btn btn-primary btn-lg">Home</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+</script>
+</body>
+</html>

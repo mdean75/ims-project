@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title>Incident Management System View Ticket</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+<body>
+<div class="container" id="top">
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
+            <div class="card-body text-dark mb-3">
+                <h1 class="text-center">Incident Management System</h1>
+                <h2 class="text-center">Ticket Review</h2>
+                <h3 class="text-center">Incident number: <span th:text="${id}"></span></h3>
+                <div class="row justify-content-center">
+                    <div class="message col-md-6">
+
+                        <p class="text-center">Tuesday February 12, 2018</p></hr>
+                    </div>
+                    <form method="get">
+
+                        <p>Ticket information</p>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label class="small">Ticket ID</label>
+                                <input type="text" class="form-control" placeholder="Ticket ID" />
+                            </div>
+                            <div class="form-group col">
+                                <label class="small">Impact</label>
+                                <input type="text" class="form-control bg-danger text-light" placeholder="Severity" />
+                            </div>
+                            <div class="form-group col">
+                                <label class="small">Date opened</label>
+                                <input type="text" class="form-control" placeholder="Open Date" />
+                            </div>
+                            <div class="form-group col">
+                                <label class="small">Status</label>
+                                <input type="text" class="form-control" placeholder="Status" />
+                            </div>
+
+
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label>Incident title/short description</label>
+                                <input type="text" class="form-control" />
+                            </div>
+
+
+                        </div>
+                        <p>Incident detail</p>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <textarea class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <p>Incident type</p>
+                        <div class="form-row">
+
+                            <div class="form-group col">
+
+                                <select class="custom-select">
+                                    <option>Select Category</option>
+                                    <option>Maintenance</option>
+                                    <option>IT</option>
+                                    <option>Training</option>
+                                </select>
+                            </div>
+                            <div class="form-group col">
+                                <select class="custom-select">
+                                    <option>Select Sub-Category</option>
+                                    <option>Building</option>
+                                    <option>Ambulance</option>
+                                    <option>Network</option>
+                                    <option>Truck computer</option>
+                                </select>
+                            </div>
+                            <div class="form-group col">
+                                <select class="custom-select">
+                                    <option>Select Detail-Category</option>
+                                    <option>Plumbing</option>
+                                    <option>Lighting</option>
+                                    <option>Warning indicator</option>
+                                    <option>Air conditioning</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p>Assignment</p>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <input type="text" class="form-control" placeholder="Assigned to group" />
+                            </div>
+                            <div class="form-group col">
+                                <input type="text" class="form-control" placeholder="Assigned to person" />
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Time in Status" />
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Date last modified" />
+                            </div>
+
+                        </div>
+                        <p>Request information</p>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label class="small">Requester name</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="small">Requester phone</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col">
+                                <label class="small">Requester email</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label class="small">Location of incident</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col">
+                                <label class="small">Sub location</label>
+                                <input type="text" class="form-control" />
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label class="small">Opened By</label>
+                                <input type="text" class="form-control" placeholder="Opened By" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="small">Phone</label>
+                                <input type="text" class="form-control" placeholder="phone" />
+                            </div>
+                            <div class="form-group col">
+                                <label class="small">Email</label>
+                                <input type="text" class="form-control" placeholder="email" />
+                            </div>
+                        </div>
+
+                        <p>Update log</p>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <textarea class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="margin: auto;">
+                                <input type="submit" class="btn btn-danger" value="Create Ticket" />
+                                <a href="../list" class="btn btn-info">Cancel </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
