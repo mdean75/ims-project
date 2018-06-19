@@ -1,11 +1,15 @@
 package me.bedaring.imsproject.models;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Entity
@@ -14,7 +18,10 @@ public class Ticket {
     @Id
     @GeneratedValue
     private int id;
-
+    @CreationTimestamp
+    private LocalDateTime createTimestamp;
+    @UpdateTimestamp
+    private LocalDateTime updateTimestamp;
     @ManyToOne
     private Category categoryMain;
     @NotNull
@@ -52,7 +59,7 @@ public class Ticket {
     @Size(min=1, message = "Field cannot be empty")
     private String locationDetail;
 
-    public Ticket(Category categoryMain, String categorySub, String categoryDetail, String title,
+    public Ticket(LocalDateTime createTimestamp, LocalDateTime updateTimestamp, Category categoryMain, String categorySub, String categoryDetail, String title,
                   String description, AssignedGroup assignedGroup, String assignedPerson, Severity severity,
                   String requestorName, String requestorPhone, String requestorEmail, String location,
                   String locationDetail) {
@@ -70,12 +77,30 @@ public class Ticket {
         this.requestorEmail = requestorEmail;
         this.location = location;
         this.locationDetail = locationDetail;
+        this.createTimestamp = createTimestamp;
+        this.updateTimestamp = updateTimestamp;
     }
 
     public Ticket() { }
 
     public int getId() {
         return id;
+    }
+
+    public LocalDateTime getCreateTimestamp() {
+        return createTimestamp;
+    }
+
+    public void setCreateTimestamp(LocalDateTime createTimestamp) {
+        this.createTimestamp = createTimestamp;
+    }
+
+    public LocalDateTime getUpdateTimestamp() {
+        return updateTimestamp;
+    }
+
+    public void setUpdateTimestamp(LocalDateTime updateTimestamp) {
+        this.updateTimestamp = updateTimestamp;
     }
 
     public Category getCategoryMain() {

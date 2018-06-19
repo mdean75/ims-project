@@ -26,15 +26,17 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <label class="small">Ticket ID</label>
-                                <input type="text" class="form-control" placeholder="Ticket ID" />
+                                <input type="text" class="form-control" name="id" readonly="readonly" th:value="${id}" />
                             </div>
                             <div class="form-group col">
                                 <label class="small">Impact</label>
-                                <input type="text" class="form-control bg-danger text-light" placeholder="Severity" />
+                                <input type="text" class="form-control bg-danger text-light"
+                                       th:value="${{incident.severity.severityName}}" />
                             </div>
                             <div class="form-group col">
                                 <label class="small">Date opened</label>
-                                <input type="text" class="form-control" placeholder="Open Date" />
+                                <input type="text" class="form-control" name="createTimestamp" readonly="readonly"
+                                       th:value="${{incident.createTimestamp}}" />
                             </div>
                             <div class="form-group col">
                                 <label class="small">Status</label>
@@ -47,7 +49,7 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <label>Incident title/short description</label>
-                                <input type="text" class="form-control" />
+                                <input type="text" class="form-control" name="title" th:value="${{incident.title}}"/>
                             </div>
 
 
@@ -55,7 +57,7 @@
                         <p>Incident detail</p>
                         <div class="form-row">
                             <div class="form-group col">
-                                <textarea class="form-control" rows="5"></textarea>
+                                <textarea class="form-control" rows="5" th:text="${{incident.description}}"></textarea>
                             </div>
                         </div>
                         <p>Incident type</p>
@@ -101,7 +103,8 @@
                                 <input type="text" class="form-control" placeholder="Time in Status" />
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Date last modified" />
+                                <input type="text" class="form-control" name="updateTimestamp" readonly="readonly"
+                                       th:value="${{incident.updateTimestamp}}" />
                             </div>
 
                         </div>
@@ -109,25 +112,25 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <label class="small">Requester name</label>
-                                <input type="text" class="form-control" />
+                                <input type="text" class="form-control" th:value="${{incident.requestorName}} "/>
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small">Requester phone</label>
-                                <input type="text" class="form-control" />
+                                <input type="text" class="form-control" th:value="${{incident.requestorPhone}} "/>
                             </div>
                             <div class="form-group col">
                                 <label class="small">Requester email</label>
-                                <input type="text" class="form-control" />
+                                <input type="text" class="form-control" th:value="${{incident.requestorEmail}}"/>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col">
                                 <label class="small">Location of incident</label>
-                                <input type="text" class="form-control" />
+                                <input type="text" class="form-control" th:value="${{incident.location}}" />
                             </div>
                             <div class="form-group col">
                                 <label class="small">Sub location</label>
-                                <input type="text" class="form-control" />
+                                <input type="text" class="form-control" th:value="${{incident.locationDetail}}" />
                             </div>
 
                         </div>
