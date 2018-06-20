@@ -52,7 +52,10 @@
                         <td th:text="${ticket.title}"></td>
                         <td th:text="${ticket.categoryMain.categoryName}">Building</td>
                         <td th:text="${ticket.assignedGroup.groupName}">Joe Smith</td>
-                        <td th:text="${ticket.severity.severityName}">Open</td>
+
+                        <td th:text="${ticket.severity.severityName}"
+                            th:classappend="(${ticket.severity.id} == 3 ? 'bg-danger text-light' : '')
+                                + (${ticket.severity.id} == 2 ? bg-warning : '')">Open</td>
                         <td th:text="${ticket.location}"></td>
 
                     </tr>

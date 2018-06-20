@@ -56,6 +56,7 @@ public class ImsController {
     public String list(Model model) {
         model.addAttribute("tickets", imsDao.findAll());
         model.addAttribute("title", "IMS - List Tickets");
+        model.addAttribute("severities", severityDao.findAll());
         return "ticket/list";
     }
 
