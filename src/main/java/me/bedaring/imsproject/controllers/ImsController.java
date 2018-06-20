@@ -40,10 +40,16 @@ public class ImsController {
         return "ticket/index";
     }
 
-    @RequestMapping(value = "main")
+    @RequestMapping(value = "main", method = RequestMethod.GET)
     public String main(Model model) {
         model.addAttribute("title", "IMS - Main");
         return "ticket/main";
+    }
+
+    @RequestMapping(value = "main", method = RequestMethod.POST)
+    public String mainPost(Model model, @RequestParam int id) {
+        model.addAttribute("title", "IMS - Main");
+        return "redirect:/ticket/view/"+id;
     }
 
     @RequestMapping(value = "list")
