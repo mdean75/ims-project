@@ -59,6 +59,9 @@ public class ImsController {
         model.addAttribute("title", "IMS - View Ticket");
         model.addAttribute("id", id);
         model.addAttribute("incident", imsDao.findById(Integer.valueOf(id)));
+        model.addAttribute("groups", groupDao.findAll());
+        model.addAttribute("severities", severityDao.findAll());
+        model.addAttribute("categories", categoryDao.findAll());
         return "ticket/view";
     }
 

@@ -30,8 +30,13 @@
                             </div>
                             <div class="form-group col">
                                 <label class="small">Impact</label>
-                                <input type="text" class="form-control bg-danger text-light"
-                                       th:value="${{incident.severity.severityName}}" />
+
+                                <select class="custom-select" name="severity">
+                                    <option th:each="severity : ${severities}"
+                                            th:value="${severity.id}"
+                                            th:text="${severity.severityName}"
+                                            th:selected="(${{incident.severity.id}} == ${severity.id})"></option>
+                                </select>
                             </div>
                             <div class="form-group col">
                                 <label class="small">Date opened</label>
@@ -64,12 +69,13 @@
                         <div class="form-row">
 
                             <div class="form-group col">
+                                <select class="custom-select" name="categoryMain">
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.categoryName}"
+                                            th:selected="(${{incident.categoryMain.id}} == ${category.id})">
+                                    </option>
 
-                                <select class="custom-select">
-                                    <option>Select Category</option>
-                                    <option>Maintenance</option>
-                                    <option>IT</option>
-                                    <option>Training</option>
                                 </select>
                             </div>
                             <div class="form-group col">
@@ -94,7 +100,14 @@
                         <p>Assignment</p>
                         <div class="form-row">
                             <div class="form-group col">
-                                <input type="text" class="form-control" placeholder="Assigned to group" />
+                                <select class="custom-select" name="assignedGroup">
+                                    <option th:each="group : ${groups}"
+                                            th:value="${group.id}"
+                                            th:text="${group.groupName}"
+                                            th:selected="(${{incident.assignedGroup.id}} == ${group.id})">
+                                    </option>
+
+                                </select>
                             </div>
                             <div class="form-group col">
                                 <input type="text" class="form-control" placeholder="Assigned to person" />
