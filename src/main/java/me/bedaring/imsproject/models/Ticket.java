@@ -90,6 +90,10 @@ public class Ticket {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public LocalDateTime getCreateTimestamp() {
         return createTimestamp;
     }

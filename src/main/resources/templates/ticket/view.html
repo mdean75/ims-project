@@ -20,32 +20,33 @@
 
                         <p class="text-center">Tuesday February 12, 2018</p></hr>
                     </div>
-                    <form method="get">
+                    <form method="post" th:object="${incident}">
 
                         <p>Ticket information</p>
                         <div class="form-row">
                             <div class="form-group col">
                                 <label class="small">Ticket ID</label>
-                                <input type="text" class="form-control" name="id" readonly="readonly" th:value="${id}" />
+                                <input type="text" class="form-control" readonly="readonly" th:field="*{id}" />
                             </div>
                             <div class="form-group col">
                                 <label class="small">Impact</label>
 
-                                <select class="custom-select" name="severity">
-                                    <option th:each="severity : ${severities}"
-                                            th:value="${severity.id}"
-                                            th:text="${severity.severityName}"
-                                            th:selected="(${{incident.severity.id}} == ${severity.id})"></option>
+                                <select class="custom-select" th:field="*{severity}">
+                                    <option th:each="displaySeverity : ${severities}"
+                                            th:value="${displaySeverity.id}"
+                                            th:text="${displaySeverity.severityName}"
+                                            th:selected="(${{incident.severity.id}} == ${displaySeverity.id})">
+
+                                    </option>
                                 </select>
                             </div>
                             <div class="form-group col">
                                 <label class="small">Date opened</label>
-                                <input type="text" class="form-control" name="createTimestamp" readonly="readonly"
-                                       th:value="${{incident.createTimestamp}}" />
+                                <input type="text" class="form-control" th:field="*{createTimestamp}" readonly="readonly" />
                             </div>
                             <div class="form-group col">
                                 <label class="small">Status</label>
-                                <select class="custom-select" name="severity">
+                                <select class="custom-select" th:field="*{status}">
                                     <option th:each="status : ${statuses}"
                                             th:value="${status.id}"
                                             th:text="${status.statusName}"
@@ -59,7 +60,7 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <label>Incident title/short description</label>
-                                <input type="text" class="form-control" name="title" th:value="${{incident.title}}"/>
+                                <input type="text" class="form-control" th:field="*{title}"/>
                             </div>
 
 
@@ -67,14 +68,16 @@
                         <p>Incident detail</p>
                         <div class="form-row">
                             <div class="form-group col">
-                                <textarea class="form-control" rows="5" th:text="${{incident.description}}"></textarea>
+                                <textarea class="form-control" readonly="readonly" rows="5" th:field="*{description}">
+
+                                </textarea>
                             </div>
                         </div>
                         <p>Incident type</p>
                         <div class="form-row">
 
                             <div class="form-group col">
-                                <select class="custom-select" name="categoryMain">
+                                <select class="custom-select" th:field="*{categoryMain}">
                                     <option th:each="category : ${categories}"
                                             th:value="${category.id}"
                                             th:text="${category.categoryName}"
@@ -84,28 +87,28 @@
                                 </select>
                             </div>
                             <div class="form-group col">
-                                <select class="custom-select">
-                                    <option>Select Sub-Category</option>
-                                    <option>Building</option>
-                                    <option>Ambulance</option>
-                                    <option>Network</option>
-                                    <option>Truck computer</option>
+                                <select class="custom-select" th:field="*{categorySub}">
+                                    <option value="">Select Sub-Category</option>
+                                    <option value="Building">Building</option>
+                                    <option value="Ambulance">Ambulance</option>
+                                    <option value="Network">Network</option>
+                                    <option value="Truck Computer">Truck computer</option>
                                 </select>
                             </div>
                             <div class="form-group col">
-                                <select class="custom-select">
-                                    <option>Select Detail-Category</option>
-                                    <option>Plumbing</option>
-                                    <option>Lighting</option>
-                                    <option>Warning indicator</option>
-                                    <option>Air conditioning</option>
+                                <select class="custom-select" th:field="*{categoryDetail}">
+                                    <option value="">Select Detail-Category</option>
+                                    <option value="Plumbing">Plumbing</option>
+                                    <option value="Lighting">Lighting</option>
+                                    <option value="Warning indicator">Warning indicator</option>
+                                    <option value="Air conditioning">Air conditioning</option>
                                 </select>
                             </div>
                         </div>
                         <p>Assignment</p>
                         <div class="form-row">
                             <div class="form-group col">
-                                <select class="custom-select" name="assignedGroup">
+                                <select class="custom-select" th:field="*{assignedGroup}">
                                     <option th:each="group : ${groups}"
                                             th:value="${group.id}"
                                             th:text="${group.groupName}"
@@ -115,14 +118,15 @@
                                 </select>
                             </div>
                             <div class="form-group col">
-                                <input type="text" class="form-control" placeholder="Assigned to person" />
+                                <input type="text" class="form-control" th:field="*{assignedPerson}"
+                                       placeholder="Assigned to person" />
                             </div>
                             <div class="col">
                                 <input type="text" class="form-control" placeholder="Time in Status" />
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" name="updateTimestamp" readonly="readonly"
-                                       th:value="${{incident.updateTimestamp}}" />
+                                <input type="text" class="form-control" readonly="readonly"
+                                       th:field="*{updateTimestamp}" />
                             </div>
 
                         </div>
@@ -130,25 +134,25 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <label class="small">Requester name</label>
-                                <input type="text" class="form-control" th:value="${{incident.requestorName}} "/>
+                                <input type="text" class="form-control" th:field="*{requestorName}" />
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="small">Requester phone</label>
-                                <input type="text" class="form-control" th:value="${{incident.requestorPhone}} "/>
+                                <input type="text" class="form-control" th:field="*{requestorPhone}"/>
                             </div>
                             <div class="form-group col">
                                 <label class="small">Requester email</label>
-                                <input type="text" class="form-control" th:value="${{incident.requestorEmail}}"/>
+                                <input type="text" class="form-control" th:field="*{requestorEmail}"/>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col">
                                 <label class="small">Location of incident</label>
-                                <input type="text" class="form-control" th:value="${{incident.location}}" />
+                                <input type="text" class="form-control" th:field="*{location}"/>
                             </div>
                             <div class="form-group col">
                                 <label class="small">Sub location</label>
-                                <input type="text" class="form-control" th:value="${{incident.locationDetail}}" />
+                                <input type="text" class="form-control" th:field="*{locationDetail}"/>
                             </div>
 
                         </div>
@@ -175,7 +179,7 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group" style="margin: auto;">
-                                <input type="submit" class="btn btn-danger" value="Create Ticket" />
+                                <input type="submit" class="btn btn-danger" value="Update Ticket" />
                                 <a href="../list" class="btn btn-info">Cancel </a>
                             </div>
                         </div>

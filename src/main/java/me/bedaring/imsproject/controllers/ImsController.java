@@ -57,17 +57,49 @@ public class ImsController {
         return "ticket/list";
     }
 
-    @RequestMapping(value = "view/{id}")
+    @RequestMapping(value = "view/{id}", method = RequestMethod.GET)
     public String viewTicket(Model model, @PathVariable String id) {
 
         model.addAttribute("title", "IMS - View Ticket");
-        model.addAttribute("id", id);
+        //model.addAttribute("ticket", new Ticket());
+       // model.addAttribute("id", id);
         model.addAttribute("incident", imsDao.findById(Integer.valueOf(id)));
         model.addAttribute("groups", groupDao.findAll());
         model.addAttribute("severities", severityDao.findAll());
         model.addAttribute("categories", categoryDao.findAll());
         model.addAttribute("statuses", statusDao.findAll());
         return "ticket/view";
+    }
+
+    @RequestMapping(value = "view/{id}", method = RequestMethod.POST)
+    public String updateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors,
+                               @RequestParam int assignedGroup, @RequestParam int severity,
+                               @RequestParam int categoryMain, @RequestParam int status,
+                               @RequestParam int id, Model model){
+
+        if(errors.hasErrors()) {
+            model.addAttribute("title", "IMS - update Ticket");
+            model.addAttribute("groups", groupDao.findAll());
+            model.addAttribute("severities", severityDao.findAll());
+            model.addAttribute("categories", categoryDao.findAll());
+            model.addAttribute("statuses", statusDao.findAll());
+            return "ticket/view";
+        }
+
+        Optional<Ticket> ticket = imsDao.findById(id);
+        Optional<AssignedGroup> group = groupDao.findById(assignedGroup);
+        Optional<Severity> displaySeverity = severityDao.findById(severity);
+        Optional<Category> category = categoryDao.findById(categoryMain);
+        Optional<Status> statusD = statusDao.findById(status);
+
+        newTicket.setId(id);
+        newTicket.setAssignedGroup(group);
+        newTicket.setSeverity(displaySeverity);
+        newTicket.setCategoryMain(category);
+        newTicket.setStatus(statusD);
+
+        imsDao.save(newTicket);
+        return "redirect:/ticket/main";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
@@ -102,6 +134,7 @@ public class ImsController {
         newTicket.setAssignedGroup(group);
         newTicket.setSeverity(displaySeverity);
         newTicket.setCategoryMain(category);
+        newTicket.setStatus(status);
 
         imsDao.save(newTicket);
         return "redirect:/ticket/main";
