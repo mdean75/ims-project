@@ -3,10 +3,7 @@ package me.bedaring.imsproject.models;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -60,11 +57,13 @@ public class Ticket {
     @NotNull
     @Size(min=1, message = "Field cannot be empty")
     private String locationDetail;
+    @Column(length = 65535, columnDefinition = "Text")
+    private String log;
 
     public Ticket(LocalDateTime createTimestamp, LocalDateTime updateTimestamp, Category categoryMain, String categorySub, String categoryDetail, String title,
                   String description, AssignedGroup assignedGroup, String assignedPerson, Severity severity, Status status,
                   String requestorName, String requestorPhone, String requestorEmail, String location,
-                  String locationDetail) {
+                  String locationDetail, String log) {
 
         this.categoryMain = categoryMain;
         this.categorySub = categorySub;
@@ -82,6 +81,7 @@ public class Ticket {
         this.locationDetail = locationDetail;
         this.createTimestamp = createTimestamp;
         this.updateTimestamp = updateTimestamp;
+        this.log = log;
     }
 
     public Ticket() { }
@@ -234,5 +234,13 @@ public class Ticket {
 
     public void setStatus(Optional<Status> status) {
 
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
     }
 }
