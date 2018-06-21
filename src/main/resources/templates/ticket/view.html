@@ -45,7 +45,12 @@
                             </div>
                             <div class="form-group col">
                                 <label class="small">Status</label>
-                                <input type="text" class="form-control" placeholder="Status" />
+                                <select class="custom-select" name="severity">
+                                    <option th:each="status : ${statuses}"
+                                            th:value="${status.id}"
+                                            th:text="${status.statusName}"
+                                            th:selected="(${{incident.status.id}} == ${status.id})"></option>
+                                </select>
                             </div>
 
 

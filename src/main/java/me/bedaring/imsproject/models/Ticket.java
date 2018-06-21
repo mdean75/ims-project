@@ -43,6 +43,8 @@ public class Ticket {
     private String assignedPerson;
     @ManyToOne
     private Severity severity;
+    @ManyToOne
+    private Status status;
     @NotNull
     @Size(min=1, message = "Field cannot be empty")
     private String requestorName;
@@ -60,7 +62,7 @@ public class Ticket {
     private String locationDetail;
 
     public Ticket(LocalDateTime createTimestamp, LocalDateTime updateTimestamp, Category categoryMain, String categorySub, String categoryDetail, String title,
-                  String description, AssignedGroup assignedGroup, String assignedPerson, Severity severity,
+                  String description, AssignedGroup assignedGroup, String assignedPerson, Severity severity, Status status,
                   String requestorName, String requestorPhone, String requestorEmail, String location,
                   String locationDetail) {
 
@@ -72,6 +74,7 @@ public class Ticket {
         this.assignedGroup = assignedGroup;
         this.assignedPerson = assignedPerson;
         this.severity = severity;
+        this.status = status;
         this.requestorName = requestorName;
         this.requestorPhone = requestorPhone;
         this.requestorEmail = requestorEmail;
@@ -215,5 +218,17 @@ public class Ticket {
     }
 
     public void setCategoryMain(Optional<Category> category) {
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setStatus(Optional<Status> status) {
+
     }
 }
