@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+    </head>
+<body>
+<div class="container" id="top">
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
+            <div class="card-body text-dark mb-3">
+                <h1 class="text-center">Incident Management System</h1>
+                <h2 class="text-center">Administrative Functions</h2>
+                <div class="row justify-content-center">
+                    <div class="message col-md-6">
+                        <p class="text-center">Tuesday February 12, 2018</p><hr>
+                        <h3 class="text-center">Select Action</h3>
+                        <div class="text-center">
+                            <div class="dropdown d-inline-block">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">Add</button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="category/add">Category</a>
+                                    <a class="dropdown-item" href="group/add">Group</a>
+                                    <a class="dropdown-item" href="severity/add">Severity</a>
+
+                                </div>
+                            </div>
+
+                            <div class="dropdown d-inline-block">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">Update</button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="category/update">Category</a>
+                                    <a class="dropdown-item" href="group/update">Group</a>
+                                    <a class="dropdown-item" href="severity/update">Severity</a>
+
+                                </div>
+                            </div>
+
+                            <div class="dropdown d-inline-block">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">Delete</button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="category/delete">Category</a>
+                                    <a class="dropdown-item" href="group/delete">Group</a>
+                                    <a class="dropdown-item" href="severity/delete">Severity</a>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
