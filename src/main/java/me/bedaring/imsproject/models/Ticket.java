@@ -21,12 +21,10 @@ public class Ticket {
     private LocalDateTime updateTimestamp;
     @ManyToOne
     private Category categoryMain;
-    @NotNull
-    @Size(min=1, message = "Field cannot be empty")
-    private String categorySub;
-    @NotNull
-    @Size(min=1, message = "Field cannot be empty")
-    private String categoryDetail;
+    @ManyToOne
+    private Category categorySub;
+    @ManyToOne
+    private Category categoryDetail;
     @NotNull
     @Size(min=1, message = "Field cannot be empty")
     private String title;
@@ -60,7 +58,7 @@ public class Ticket {
     @Column(length = 65535, columnDefinition = "Text")
     private String log;
 
-    public Ticket(LocalDateTime createTimestamp, LocalDateTime updateTimestamp, Category categoryMain, String categorySub, String categoryDetail, String title,
+    public Ticket(LocalDateTime createTimestamp, LocalDateTime updateTimestamp, Category categoryMain, Category categorySub, Category categoryDetail, String title,
                   String description, AssignedGroup assignedGroup, String assignedPerson, Severity severity, Status status,
                   String requestorName, String requestorPhone, String requestorEmail, String location,
                   String locationDetail, String log) {
@@ -118,19 +116,19 @@ public class Ticket {
         this.categoryMain = categoryMain;
     }
 
-    public String getCategorySub() {
+    public Category getCategorySub() {
         return categorySub;
     }
 
-    public void setCategorySub(String categorySub) {
+    public void setCategorySub(Category categorySub) {
         this.categorySub = categorySub;
     }
 
-    public String getCategoryDetail() {
+    public Category getCategoryDetail() {
         return categoryDetail;
     }
 
-    public void setCategoryDetail(String categoryDetail) {
+    public void setCategoryDetail(Category categoryDetail) {
         this.categoryDetail = categoryDetail;
     }
 
@@ -242,5 +240,11 @@ public class Ticket {
 
     public void setLog(String log) {
         this.log = log;
+    }
+
+    public void setCategorySub(Optional<Category> subCategory) {
+    }
+
+    public void setCategoryDetail(Optional<Category> detailCategory) {
     }
 }

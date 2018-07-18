@@ -34,7 +34,7 @@
 
                                 <select class="custom-select" name="categoryMain">
                                     <option value="">Select Category</option>
-                                    <option th:each="category : ${categories}"
+                                    <option th:each="category : ${maincategory}"
                                             th:value="${category.id}"
                                             th:text="${category.categoryName}"></option>
 
@@ -42,22 +42,21 @@
                                 <small style="color: red;" th:errors="*{categoryMain}"></small>
                             </div>
                             <div class="form-group col">
-                                <select class="custom-select" th:field="*{categorySub}">
+                                <select class="custom-select" name="categorySub">
                                     <option value="">Select Sub-Category</option>
-                                    <option value="Building">Building</option>
-                                    <option value="Ambulance">Ambulance</option>
-                                    <option value="Network">Network</option>
-                                    <option value="Truck Computer">Truck computer</option>
+                                    <option th:each="category : ${subcategory}"
+                                            th:value="${category.id}"
+                                            th:text="${category.categoryName}"></option>
+
                                 </select>
                                 <small style="color: red;" th:errors="*{categorySub}"></small>
                             </div>
                             <div class="form-group col">
-                                <select class="custom-select" th:field="*{categoryDetail}">
+                                <select class="custom-select" name="categoryDetail">
                                     <option value="">Select Detail-Category</option>
-                                    <option value="Plumbing">Plumbing</option>
-                                    <option value="Lighting">Lighting</option>
-                                    <option value="Warning indicator">Warning indicator</option>
-                                    <option value="Air conditioning">Air conditioning</option>
+                                    <option th:each="category : ${detailcategory}"
+                                            th:value="${category.id}"
+                                            th:text="${category.categoryName}"></option>
                                 </select>
                                 <small style="color: red;" th:errors="*{categoryDetail}"></small>
                             </div>

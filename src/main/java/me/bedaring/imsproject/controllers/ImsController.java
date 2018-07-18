@@ -66,7 +66,9 @@ public class ImsController {
         model.addAttribute("incident", imsDao.findById(Integer.valueOf(id)));
         model.addAttribute("groups", groupDao.findAll());
         model.addAttribute("severities", severityDao.findAll());
-        model.addAttribute("categories", categoryDao.findAll());
+        model.addAttribute("subcategory", categoryDao.findCategoryByCategoryTypeEquals("Sub"));
+        model.addAttribute("maincategory", categoryDao.findCategoryByCategoryTypeEquals("Main"));
+        model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
         model.addAttribute("statuses", statusDao.findAll());
         return "ticket/view";
     }
@@ -108,32 +110,41 @@ public class ImsController {
         model.addAttribute("ticket", new Ticket());
         model.addAttribute("groups", groupDao.findAll());
         model.addAttribute("severities", severityDao.findAll());
-        model.addAttribute("categories", categoryDao.findAll());
         model.addAttribute("statuses", statusDao.findAll());
+        model.addAttribute("subcategory", categoryDao.findCategoryByCategoryTypeEquals("Sub"));
+        model.addAttribute("maincategory", categoryDao.findCategoryByCategoryTypeEquals("Main"));
+        model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
         return "ticket/create";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public String processCreateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors,
                                       @RequestParam int assignedGroup, @RequestParam int severity,
-                                      @RequestParam int categoryMain, @RequestParam int statusId, Model model) {
+                                      @RequestParam int categoryMain, @RequestParam int categorySub,
+                                      @RequestParam int categoryDetail, @RequestParam int statusId, Model model) {
 
         if(errors.hasErrors()) {
             model.addAttribute("title", "IMS - Create Ticket");
             model.addAttribute("groups", groupDao.findAll());
             model.addAttribute("severities", severityDao.findAll());
-            model.addAttribute("categories", categoryDao.findAll());
+            model.addAttribute("subcategory", categoryDao.findCategoryByCategoryTypeEquals("Sub"));
+            model.addAttribute("maincategory", categoryDao.findCategoryByCategoryTypeEquals("Main"));
+            model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
             model.addAttribute("statuses", statusDao.findAll());
             return "ticket/create";
         }
 
         Optional<AssignedGroup> group = groupDao.findById(assignedGroup);
         Optional<Severity> displaySeverity = severityDao.findById(severity);
-        Optional<Category> category = categoryDao.findById(categoryMain);
+        Optional<Category> mainCategory = categoryDao.findById(categoryMain);
+        Optional<Category> subCategory = categoryDao.findById(categorySub);
+        Optional<Category> detailCategory = categoryDao.findById(categoryDetail);
         Optional<Status> status = statusDao.findById(statusId);
         newTicket.setAssignedGroup(group);
         newTicket.setSeverity(displaySeverity);
-        newTicket.setCategoryMain(category);
+        newTicket.setCategoryMain(mainCategory);
+        newTicket.setCategorySub(subCategory);
+        newTicket.setCategoryDetail(detailCategory);
         newTicket.setStatus(status);
 
         imsDao.save(newTicket);

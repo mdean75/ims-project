@@ -3,9 +3,7 @@
 <head th:replace="fragments :: head">
     <meta charset="UTF-8" />
     <title>Incident Management System View Ticket</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
 </head>
 <body>
 <div class="container" id="top">
@@ -78,7 +76,7 @@
 
                             <div class="form-group col">
                                 <select class="custom-select" th:field="*{categoryMain}">
-                                    <option th:each="category : ${categories}"
+                                    <option th:each="category : ${maincategory}"
                                             th:value="${category.id}"
                                             th:text="${category.categoryName}"
                                             th:selected="(${{incident.categoryMain.id}} == ${category.id})">
@@ -88,20 +86,20 @@
                             </div>
                             <div class="form-group col">
                                 <select class="custom-select" th:field="*{categorySub}">
-                                    <option value="">Select Sub-Category</option>
-                                    <option value="Building">Building</option>
-                                    <option value="Ambulance">Ambulance</option>
-                                    <option value="Network">Network</option>
-                                    <option value="Truck Computer">Truck computer</option>
+                                    <option th:each="category : ${subcategory}"
+                                            th:value="${category.id}"
+                                            th:text="${category.categoryName}"
+                                            th:selected="(${{incident.categorySub.id}} == ${category.id})">
+                                    </option>
                                 </select>
                             </div>
                             <div class="form-group col">
                                 <select class="custom-select" th:field="*{categoryDetail}">
-                                    <option value="">Select Detail-Category</option>
-                                    <option value="Plumbing">Plumbing</option>
-                                    <option value="Lighting">Lighting</option>
-                                    <option value="Warning indicator">Warning indicator</option>
-                                    <option value="Air conditioning">Air conditioning</option>
+                                    <option th:each="category : ${detailcategory}"
+                                            th:value="${category.id}"
+                                            th:text="${category.categoryName}"
+                                            th:selected="(${{incident.categoryDetail.id}} == ${category.id})">
+                                    </option>
                                 </select>
                             </div>
                         </div>
