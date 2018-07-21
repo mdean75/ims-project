@@ -2,6 +2,7 @@ package me.bedaring.imsproject.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class AssignedGroup {
     private int id;
 
     @NotNull
+    @Size(min = 1, message = "Required field")
     private String groupName;
 
     @OneToMany

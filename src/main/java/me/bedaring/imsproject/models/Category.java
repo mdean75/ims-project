@@ -2,6 +2,7 @@ package me.bedaring.imsproject.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +14,11 @@ public class Category {
     private int id;
 
     @NotNull
+    @Size(min = 1, message = "Name cannot be empty")
     private String categoryName;
 
     @NotNull
+    @Size(min = 1, message = "Type cannot be empty")
     private String categoryType;
 
     @OneToMany
