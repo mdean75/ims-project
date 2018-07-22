@@ -9,40 +9,43 @@
 </head>
 <body>
 <div class="container" id="top">
-    <div class="row justify-content-center">
-        <div class="card border-primary col-sm-8 bg-light">
-            <div class="card-body text-dark mb-3">
-                <h1 class="text-center">Incident Management System</h1>
-                <h2 class="text-center">Add Severity</h2>
-                <div class="row justify-content-center">
-                    <div class="message col-md-6">
+    <div class="row">
+        <nav th:replace="fragments :: side-nav"></nav>
+        <div class="justify-content-center col-sm-8">
+            <div class="card border-primary bg-light">
+                <div class="card-body text-dark mb-3">
+                    <h1 class="text-center">Incident Management System</h1>
+                    <h2 class="text-center">Add Severity</h2>
+                    <div class="row justify-content-center">
+                        <div class="message col-md-6">
 
-                        <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
+                            <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
+
+                        </div>
 
                     </div>
+                    <div class="">
+                        <form method="post" th:object="${severity}">
 
-                </div>
-                <div class="">
-                    <form method="post" th:object="${severity}">
+                            <div class="form-row">
+                                <label>Field name</label>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <input class="form-control" th:field="*{severityName}" />
+                                    <small style="color: red;" th:errors="*{severityName}"></small>
+                                </div>
 
-                        <div class="form-row">
-                            <label>Field name</label>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <input class="form-control" th:field="*{severityName}" />
-                                <small style="color: red;" th:errors="*{severityName}"></small>
                             </div>
 
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group" style="margin: auto;">
-                                <input type="submit" class="btn btn-danger" value="Add new" />
-                                <a href="/admin/menu" class="btn btn-info">Cancel </a>
+                            <div class="form-row">
+                                <div class="form-group" style="margin: auto;">
+                                    <input type="submit" class="btn btn-danger" value="Add new" />
+                                    <a href="/admin/menu" class="btn btn-info">Cancel </a>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

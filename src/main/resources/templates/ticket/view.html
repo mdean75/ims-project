@@ -7,181 +7,184 @@
 </head>
 <body>
 <div class="container" id="top">
-    <div class="row justify-content-center">
-        <div class="card border-primary col-sm-8 bg-light">
-            <div class="card-body text-dark mb-3">
-                <h1 class="text-center">Incident Management System</h1>
-                <h2 class="text-center">Ticket Review</h2>
-                <h3 class="text-center">Incident number: <span th:text="${id}"></span></h3>
-                <div class="row justify-content-center">
-                    <div class="message col-md-6">
+    <div class="row">
+    <nav th:replace="fragments :: side-nav"></nav>
+        <div class="justify-content-center col-sm-8">
+            <div class="card border-primary bg-light">
+                <div class="card-body text-dark mb-3">
+                    <h1 class="text-center">Incident Management System</h1>
+                    <h2 class="text-center">Ticket Review</h2>
+                    <h3 class="text-center">Incident number: <span th:text="${id}"></span></h3>
+                    <div class="row justify-content-center">
+                        <div class="message col-md-6">
 
-                        <p class="text-center">Tuesday February 12, 2018</p></hr>
+                            <p class="text-center">Tuesday February 12, 2018</p></hr>
+                        </div>
+                        <form method="post" th:object="${incident}">
+
+                            <p>Ticket information</p>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label class="small">Ticket ID</label>
+                                    <input type="text" class="form-control" readonly="readonly" th:field="*{id}" />
+                                </div>
+                                <div class="form-group col">
+                                    <label class="small">Impact</label>
+
+                                    <select class="custom-select" th:field="*{severity}">
+                                        <option th:each="displaySeverity : ${severities}"
+                                                th:value="${displaySeverity.id}"
+                                                th:text="${displaySeverity.severityName}"
+                                                th:selected="(${{incident.severity.id}} == ${displaySeverity.id})">
+
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <label class="small">Date opened</label>
+                                    <input type="text" class="form-control" th:field="*{createTimestamp}" readonly="readonly" />
+                                </div>
+                                <div class="form-group col">
+                                    <label class="small">Status</label>
+                                    <select class="custom-select" th:field="*{status}">
+                                        <option th:each="status : ${statuses}"
+                                                th:value="${status.id}"
+                                                th:text="${status.statusName}"
+                                                th:selected="(${{incident.status.id}} == ${status.id})"></option>
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Incident title/short description</label>
+                                    <input type="text" class="form-control" th:field="*{title}"/>
+                                </div>
+
+
+                            </div>
+                            <p>Incident detail</p>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <textarea class="form-control" readonly="readonly" rows="5" th:field="*{description}">
+
+                                    </textarea>
+                                </div>
+                            </div>
+                            <p>Incident type</p>
+                            <div class="form-row">
+
+                                <div class="form-group col">
+                                    <select class="custom-select" th:field="*{categoryMain}">
+                                        <option th:each="category : ${maincategory}"
+                                                th:value="${category.id}"
+                                                th:text="${category.categoryName}"
+                                                th:selected="(${{incident.categoryMain.id}} == ${category.id})">
+                                        </option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <select class="custom-select" th:field="*{categorySub}">
+                                        <option th:each="category : ${subcategory}"
+                                                th:value="${category.id}"
+                                                th:text="${category.categoryName}"
+                                                th:selected="(${{incident.categorySub.id}} == ${category.id})">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <select class="custom-select" th:field="*{categoryDetail}">
+                                        <option th:each="category : ${detailcategory}"
+                                                th:value="${category.id}"
+                                                th:text="${category.categoryName}"
+                                                th:selected="(${{incident.categoryDetail.id}} == ${category.id})">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <p>Assignment</p>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <select class="custom-select" th:field="*{assignedGroup}">
+                                        <option th:each="group : ${groups}"
+                                                th:value="${group.id}"
+                                                th:text="${group.groupName}"
+                                                th:selected="(${{incident.assignedGroup.id}} == ${group.id})">
+                                        </option>
+
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <input type="text" class="form-control" th:field="*{assignedPerson}"
+                                           placeholder="Assigned to person" />
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Time in Status" />
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" readonly="readonly"
+                                           th:field="*{updateTimestamp}" />
+                                </div>
+
+                            </div>
+                            <p>Request information</p>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label class="small">Requester name</label>
+                                    <input type="text" class="form-control" th:field="*{requestorName}" />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="small">Requester phone</label>
+                                    <input type="text" class="form-control" th:field="*{requestorPhone}"/>
+                                </div>
+                                <div class="form-group col">
+                                    <label class="small">Requester email</label>
+                                    <input type="text" class="form-control" th:field="*{requestorEmail}"/>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label class="small">Location of incident</label>
+                                    <input type="text" class="form-control" th:field="*{location}"/>
+                                </div>
+                                <div class="form-group col">
+                                    <label class="small">Sub location</label>
+                                    <input type="text" class="form-control" th:field="*{locationDetail}"/>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label class="small">Opened By</label>
+                                    <input type="text" class="form-control" placeholder="Opened By" />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="small">Phone</label>
+                                    <input type="text" class="form-control" placeholder="phone" />
+                                </div>
+                                <div class="form-group col">
+                                    <label class="small">Email</label>
+                                    <input type="text" class="form-control" placeholder="email" />
+                                </div>
+                            </div>
+
+                            <p>Update log</p>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <textarea class="form-control" rows="5" th:field="*{log}"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group" style="margin: auto;">
+                                    <input type="submit" class="btn btn-danger" value="Update Ticket" />
+                                    <a href="../list" class="btn btn-info">Cancel </a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <form method="post" th:object="${incident}">
-
-                        <p>Ticket information</p>
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <label class="small">Ticket ID</label>
-                                <input type="text" class="form-control" readonly="readonly" th:field="*{id}" />
-                            </div>
-                            <div class="form-group col">
-                                <label class="small">Impact</label>
-
-                                <select class="custom-select" th:field="*{severity}">
-                                    <option th:each="displaySeverity : ${severities}"
-                                            th:value="${displaySeverity.id}"
-                                            th:text="${displaySeverity.severityName}"
-                                            th:selected="(${{incident.severity.id}} == ${displaySeverity.id})">
-
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="form-group col">
-                                <label class="small">Date opened</label>
-                                <input type="text" class="form-control" th:field="*{createTimestamp}" readonly="readonly" />
-                            </div>
-                            <div class="form-group col">
-                                <label class="small">Status</label>
-                                <select class="custom-select" th:field="*{status}">
-                                    <option th:each="status : ${statuses}"
-                                            th:value="${status.id}"
-                                            th:text="${status.statusName}"
-                                            th:selected="(${{incident.status.id}} == ${status.id})"></option>
-                                </select>
-                            </div>
-
-
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <label>Incident title/short description</label>
-                                <input type="text" class="form-control" th:field="*{title}"/>
-                            </div>
-
-
-                        </div>
-                        <p>Incident detail</p>
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <textarea class="form-control" readonly="readonly" rows="5" th:field="*{description}">
-
-                                </textarea>
-                            </div>
-                        </div>
-                        <p>Incident type</p>
-                        <div class="form-row">
-
-                            <div class="form-group col">
-                                <select class="custom-select" th:field="*{categoryMain}">
-                                    <option th:each="category : ${maincategory}"
-                                            th:value="${category.id}"
-                                            th:text="${category.categoryName}"
-                                            th:selected="(${{incident.categoryMain.id}} == ${category.id})">
-                                    </option>
-
-                                </select>
-                            </div>
-                            <div class="form-group col">
-                                <select class="custom-select" th:field="*{categorySub}">
-                                    <option th:each="category : ${subcategory}"
-                                            th:value="${category.id}"
-                                            th:text="${category.categoryName}"
-                                            th:selected="(${{incident.categorySub.id}} == ${category.id})">
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="form-group col">
-                                <select class="custom-select" th:field="*{categoryDetail}">
-                                    <option th:each="category : ${detailcategory}"
-                                            th:value="${category.id}"
-                                            th:text="${category.categoryName}"
-                                            th:selected="(${{incident.categoryDetail.id}} == ${category.id})">
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <p>Assignment</p>
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <select class="custom-select" th:field="*{assignedGroup}">
-                                    <option th:each="group : ${groups}"
-                                            th:value="${group.id}"
-                                            th:text="${group.groupName}"
-                                            th:selected="(${{incident.assignedGroup.id}} == ${group.id})">
-                                    </option>
-
-                                </select>
-                            </div>
-                            <div class="form-group col">
-                                <input type="text" class="form-control" th:field="*{assignedPerson}"
-                                       placeholder="Assigned to person" />
-                            </div>
-                            <div class="col">
-                                <input type="text" class="form-control" placeholder="Time in Status" />
-                            </div>
-                            <div class="col">
-                                <input type="text" class="form-control" readonly="readonly"
-                                       th:field="*{updateTimestamp}" />
-                            </div>
-
-                        </div>
-                        <p>Request information</p>
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <label class="small">Requester name</label>
-                                <input type="text" class="form-control" th:field="*{requestorName}" />
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="small">Requester phone</label>
-                                <input type="text" class="form-control" th:field="*{requestorPhone}"/>
-                            </div>
-                            <div class="form-group col">
-                                <label class="small">Requester email</label>
-                                <input type="text" class="form-control" th:field="*{requestorEmail}"/>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <label class="small">Location of incident</label>
-                                <input type="text" class="form-control" th:field="*{location}"/>
-                            </div>
-                            <div class="form-group col">
-                                <label class="small">Sub location</label>
-                                <input type="text" class="form-control" th:field="*{locationDetail}"/>
-                            </div>
-
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <label class="small">Opened By</label>
-                                <input type="text" class="form-control" placeholder="Opened By" />
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="small">Phone</label>
-                                <input type="text" class="form-control" placeholder="phone" />
-                            </div>
-                            <div class="form-group col">
-                                <label class="small">Email</label>
-                                <input type="text" class="form-control" placeholder="email" />
-                            </div>
-                        </div>
-
-                        <p>Update log</p>
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <textarea class="form-control" rows="5" th:field="*{log}"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group" style="margin: auto;">
-                                <input type="submit" class="btn btn-danger" value="Update Ticket" />
-                                <a href="../list" class="btn btn-info">Cancel </a>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

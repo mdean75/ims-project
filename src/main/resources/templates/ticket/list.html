@@ -20,50 +20,53 @@
 <body>
 
 <div class="container" id="top">
-    <div class="row justify-content-center">
-        <div class="card border-primary col-sm-10 col-md-8 bg-light">
-            <div class="card-body text-dark mb-3">
+    <div class="row">
+    <nav th:replace="fragments :: side-nav"></nav>
+        <div class="justify-content-center col-sm-10 col-md-8">
+            <div class="card border-primary bg-light">
+                <div class="card-body text-dark mb-3">
 
-                <h1 class="text-center">Incident Management System</h1></br>
-                <h2 class="text-center">Ticket List</h2></br>
-                <div class="row justify-content-center">
-                    <div class="col-md-7">
-                        <button class="btn btn-outline-primary col-xs-12 col-md-3">My tickets</button>
-                        <button class="btn btn-outline-primary col-xs-12 col-md-5">My team's tickets</button>
-                        <button class="btn btn-outline-primary col-xs-12 col-md-3">All tickets</button>
-                    </div>
-                </div></br>
+                    <h1 class="text-center">Incident Management System</h1></br>
+                    <h2 class="text-center">Ticket List</h2></br>
+                    <div class="row justify-content-center">
+                        <div class="col-md-7">
+                            <button class="btn btn-outline-primary col-xs-12 col-md-3">My tickets</button>
+                            <button class="btn btn-outline-primary col-xs-12 col-md-5">My team's tickets</button>
+                            <button class="btn btn-outline-primary col-xs-12 col-md-3">All tickets</button>
+                        </div>
+                    </div></br>
 
-                <table id="example" class="display table-responsive" style="width:100%;">
-                    <thead>
-                    <tr>
-                        <th>ID #</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Assigned to</th>
-                        <th>Severity</th>
-                        <th>Location</th>
+                    <table id="example" class="display table-responsive" style="width:100%;">
+                        <thead>
+                        <tr>
+                            <th>ID #</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Assigned to</th>
+                            <th>Severity</th>
+                            <th>Location</th>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="ticket : ${tickets}">
-                        <td><a th:href="@{/ticket/view/{id}(id=${ticket.id})}"><span th:text="${ticket.id}"></span> </a></td>
-                        <td th:text="${ticket.title}"></td>
-                        <td th:text="${ticket.categoryMain.categoryName}">Building</td>
-                        <td th:text="${ticket.assignedGroup.groupName}">Joe Smith</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="ticket : ${tickets}">
+                            <td><a th:href="@{/ticket/view/{id}(id=${ticket.id})}"><span th:text="${ticket.id}"></span> </a></td>
+                            <td th:text="${ticket.title}"></td>
+                            <td th:text="${ticket.categoryMain.categoryName}">Building</td>
+                            <td th:text="${ticket.assignedGroup.groupName}">Joe Smith</td>
 
-                        <td th:text="${ticket.severity.severityName}"
-                            th:classappend="(${ticket.severity.id} == 3 ? 'bg-danger text-light' : '')
-                                + (${ticket.severity.id} == 2 ? bg-warning : '')">Open</td>
-                        <td th:text="${ticket.location}"></td>
+                            <td th:text="${ticket.severity.severityName}"
+                                th:classappend="(${ticket.severity.id} == 3 ? 'bg-danger text-light' : '')
+                                    + (${ticket.severity.id} == 2 ? bg-warning : '')">Open</td>
+                            <td th:text="${ticket.location}"></td>
 
-                    </tr>
+                        </tr>
 
-                    </tbody>
-                </table>
-                </br>
-                <a href="main"><button class="btn btn-primary btn-lg">Home</button></a>
+                        </tbody>
+                    </table>
+                    </br>
+                    <a href="main"><button class="btn btn-primary btn-lg">Home</button></a>
+                </div>
             </div>
         </div>
     </div>
