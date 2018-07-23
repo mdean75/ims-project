@@ -13,12 +13,14 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("admin")
@@ -38,6 +40,7 @@ public class AdminController {
     @RequestMapping(value="menu")
     public String index(Model model) {
         model.addAttribute("title", "IMS - Admin Menu");
+        model.addAttribute("date", format.format(new Date()));
         return "admin/menu";
     }
 
@@ -108,6 +111,86 @@ public class AdminController {
         }
         categoryDao.save(category);
         message.addFlashAttribute("message", "New category successfully added");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "group/update", method = RequestMethod.GET)
+    public String listUpdateGroups(@ModelAttribute AssignedGroup assignedGroup, Model model) {
+        model.addAttribute("title", "IMS - Update Group");
+        model.addAttribute("subtitle", "Update Group");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("groups", groupDao.findAll());
+        return "admin/group/update";
+
+    }
+
+    @RequestMapping(value = "group/update", method = RequestMethod.POST)
+    public String processUpdateGroup(@Valid @ModelAttribute("assignedGroup") AssignedGroup assignedGroup,
+                                     Errors errors, RedirectAttributes message, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "IMS - Update Group");
+            model.addAttribute("subtitle", "Update Group");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("groups", groupDao.findAll());
+            model.addAttribute(message.addFlashAttribute("message", "Field cannot be empty"));
+            return "redirect:/admin/group/update";
+        }
+
+        groupDao.save(assignedGroup);
+        message.addFlashAttribute("message", "Group Successfully Updated!");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "severity/update", method = RequestMethod.GET)
+    public String listUpdateSeverities(@ModelAttribute Severity severity, Model model) {
+        model.addAttribute("title", "IMS - Update Severity");
+        model.addAttribute("subtitle", "Update Severity");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("severities", severityDao.findAll());
+        return "admin/severity/update";
+    }
+
+    @RequestMapping(value = "severity/update", method = RequestMethod.POST)
+    public String processUpdateSeverity(@Valid @ModelAttribute("severity") Severity severity, Errors errors,
+                                        RedirectAttributes message, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "IMS - Update Severity");
+            model.addAttribute("subtitle", "Update Severity");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("severities", severityDao.findAll());
+            model.addAttribute(message.addFlashAttribute("message", "Field cannot be empty"));
+            return "redirect:/admin/severity/update";
+        }
+
+        severityDao.save(severity);
+        message.addFlashAttribute("message", "Severity Successfully Updated!");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "category/update", method = RequestMethod.GET)
+    public String listUpdateCategories(@ModelAttribute Category category, Model model) {
+        model.addAttribute("title", "IMS - Update Category");
+        model.addAttribute("subtitle", "Update Category");
+        model.addAttribute("date", format.format(new Date()));
+
+        model.addAttribute("categories", categoryDao.findAll());
+        return "admin/category/update";
+    }
+
+    @RequestMapping(value = "category/update", method = RequestMethod.POST)
+    public String processUpdateCategory(@Valid @ModelAttribute Category category, Errors errors,
+                                        RedirectAttributes message, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "IMS - Update Category");
+            model.addAttribute("subtitle", "Update Category");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("categories", categoryDao.findAll());
+            model.addAttribute(message.addFlashAttribute("message", "Fields cannot be empty"));
+            return "redirect:/admin/category/update";
+        }
+
+        categoryDao.save(category);
+        message.addFlashAttribute("message", "Category Successfully Updated!");
         return "redirect:/admin/menu";
     }
 }

@@ -21,6 +21,9 @@ public class Severity {
     @JoinColumn(name = "severity_id")
     private List<Ticket> severityTickets = new ArrayList<>();
 
+    @Transient
+    private List<Severity> allSeverities = new ArrayList<>();
+
     public Severity() {
     }
 
@@ -42,6 +45,14 @@ public class Severity {
 
     public List<Ticket> getTickets() {
         return severityTickets;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Severity> returnGroups() {
+        return allSeverities;
     }
 
     public void setTickets(List<Ticket> tickets) {

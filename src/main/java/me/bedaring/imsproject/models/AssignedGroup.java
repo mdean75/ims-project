@@ -21,6 +21,9 @@ public class AssignedGroup {
     @JoinColumn(name = "group_id")
     private List<Ticket> tickets = new ArrayList<>();
 
+    @Transient
+    private List<AssignedGroup> allGroups = new ArrayList<>();
+
     public AssignedGroup() {
     }
 
@@ -32,12 +35,14 @@ public class AssignedGroup {
         return id;
     }
 
+    public void setId(int id) {this.id = id; }
+
     public String getGroupName() {
         return groupName;
     }
 
-    public List<Ticket> getTickets() {
-        return tickets;
+    public List<AssignedGroup> returnGroups() {
+        return allGroups;
     }
 
     public void setTickets(List<Ticket> tickets) {
