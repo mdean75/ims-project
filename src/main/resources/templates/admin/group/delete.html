@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="en" xmlns:th="http://www/thymeleaf.org">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title>Incident Management System </title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 </head>
 <body>
+<div class="container" id="top">
+    <div class="row">
+        <nav th:replace="fragments :: side-nav"></nav>
+        <div class="justify-content-center col-sm-8">
+            <div class="card border-primary bg-light">
+                <div class="card-body text-dark mb-3">
+                    <h1 class="text-center">Incident Management System</h1>
+                    <h2 class="text-center" th:text="${subtitle}"></h2>
+                    <div class="row justify-content-center">
+                        <div class="message col-md-6">
 
+                            <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
+                            <p class="text-center" style="color: red;" th:text="${message}"></p>
+
+                        </div>
+
+                    </div>
+                    <div class="container">
+                        <div class="row">
+
+                            <h4 class="col-md-2">ID</h4>
+
+                            <h4 class="col-md-6 offset-md-1">Group Name</h4>
+
+                            <h4 class="col-md-2 offset-md-1">Action</h4>
+                        </div>
+
+                        <div th:each="group : ${groups}">
+                            <form method="post" th:object="${assignedGroup}">
+                                <div class="form-row">
+                                    <input class="col-md-2 form-control" type="text" readonly="readonly" id="id" name="id" th:value="${group.id}"/>
+                                    <input class="col-md-6 offset-md-1 form-control" type="text" name="groupName" id="groupName" th:value="${group.groupName}"/>
+                                    <input class="col-md-2 offset-md-1 form-control btn btn-outline-danger" type="submit" value="Delete" />
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 </body>
 </html>

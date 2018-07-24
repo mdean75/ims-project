@@ -3,8 +3,10 @@ package me.bedaring.imsproject.controllers;
 import me.bedaring.imsproject.models.AssignedGroup;
 import me.bedaring.imsproject.models.Category;
 import me.bedaring.imsproject.models.Severity;
+import me.bedaring.imsproject.models.Ticket;
 import me.bedaring.imsproject.models.data.CategoryDao;
 import me.bedaring.imsproject.models.data.GroupDao;
+import me.bedaring.imsproject.models.data.ImsDao;
 import me.bedaring.imsproject.models.data.SeverityDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -34,6 +37,9 @@ public class AdminController {
 
     @Autowired
     private SeverityDao severityDao;
+
+    @Autowired
+    private ImsDao imsDao;
 
     SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
@@ -151,7 +157,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "severity/update", method = RequestMethod.POST)
-    public String processUpdateSeverity(@Valid @ModelAttribute("severity") Severity severity, Errors errors,
+    public String processUpdateSeverity(@Valid @ModelAttribute("severity") Severity severity,
+                                        @RequestParam String severityName, @RequestParam int id, Errors errors,
                                         RedirectAttributes message, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Update Severity");
@@ -162,7 +169,8 @@ public class AdminController {
             return "redirect:/admin/severity/update";
         }
 
-        severityDao.save(severity);
+        severityDao.update(severityName, id);
+
         message.addFlashAttribute("message", "Severity Successfully Updated!");
         return "redirect:/admin/menu";
     }
@@ -191,6 +199,86 @@ public class AdminController {
 
         categoryDao.save(category);
         message.addFlashAttribute("message", "Category Successfully Updated!");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "group/delete", method = RequestMethod.GET)
+    public String listDeleteGroups(@ModelAttribute AssignedGroup assignedGroup, Model model) {
+        model.addAttribute("title", "IMS - Delete Group");
+        model.addAttribute("subtitle", "Delete Group");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("groups", groupDao.findAll());
+        return "admin/group/delete";
+    }
+
+    @RequestMapping(value = "group/delete", method = RequestMethod.POST)
+    public String processDeleteGroup(@ModelAttribute AssignedGroup assignedGroup,
+                                     RedirectAttributes message, Model model) {
+        // check if any parent records exist for the group to be deleted, if any are present disallow delete and display message
+        int count = imsDao.countTicketByAssignedGroup(assignedGroup);
+        if (count > 0) {
+            model.addAttribute("title", "IMS - Delete Group");
+            model.addAttribute("subtitle", "Delete Group");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("groups", groupDao.findAll());
+            model.addAttribute(message.addFlashAttribute("message", "Field is in use and cannot be deleted"));
+            return "redirect:/admin/group/delete";
+        }
+        groupDao.deleteById(assignedGroup.getId());
+        message.addFlashAttribute("message", "Group Successfully Deleted!");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "category/delete", method = RequestMethod.GET)
+    public String listDeleteCategories(@ModelAttribute Category category, Model model) {
+        model.addAttribute("title", "IMS - Delete Category");
+        model.addAttribute("subtitle", "Delete Category");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("categories", categoryDao.findAll());
+        return "admin/category/delete";
+    }
+
+    @RequestMapping(value = "category/delete", method = RequestMethod.POST)
+    public String processDeleteCategory(@ModelAttribute Category category, RedirectAttributes message, Model model) {
+        // check if any parent records exist for the category to be deleted, if any are present disallow delete and display message
+
+        int count = imsDao.countTicketByCategory(category);
+        if (count > 0) {
+            model.addAttribute("title", "IMS - Delete Category");
+            model.addAttribute("subtitle", "Delete Category");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("categories", categoryDao.findAll());
+            model.addAttribute(message.addFlashAttribute("message", "Field is in use and cannot be deleted"));
+            return "redirect:/admin/category/delete";
+        }
+        categoryDao.deleteById(category.getId());
+        message.addFlashAttribute("message", "Category Successfully Deleted!");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "severity/delete", method = RequestMethod.GET)
+    public String listDeleteSeverities(@ModelAttribute Severity severity, Model model) {
+        model.addAttribute("title", "IMS - Delete Severity");
+        model.addAttribute("subtitle", "Delete Severity");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("severities", severityDao.findAll());
+        return "admin/severity/delete";
+    }
+
+    @RequestMapping(value = "severity/delete", method = RequestMethod.POST)
+    public String processDeleteSeverity(@ModelAttribute Severity severity, RedirectAttributes message, Model model) {
+        // check if any parent records exist for the severity to be deleted, if any are present disallow delete and display message
+        int count = imsDao.countTicketBySeverity(severity);
+        if (count > 0) {
+            model.addAttribute("title", "IMS - Delete Severity");
+            model.addAttribute("subtitle", "Delete Severity");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("severities", severityDao.findAll());
+            model.addAttribute(message.addFlashAttribute("message", "Field is in use and cannot be deleted"));
+            return "redirect:/admin/severity/delete";
+        }
+        severityDao.deleteById(severity.getId());
+        message.addFlashAttribute("message", "Severity Successfully Deleted!");
         return "redirect:/admin/menu";
     }
 }
