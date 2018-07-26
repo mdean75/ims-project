@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -19,6 +19,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
@@ -29,9 +30,14 @@
             <p><a href="/ticket/create">Create Ticket</a> </p>
             <p><a href="/ticket/list">List Tickets</a></p>
             <p><a href="/admin/menu">Admin Menu</a> </p>
+            <p><a href="/logout"><b>Logout</b></a> </p>
         </div>
     </div>
 </nav>
+
+<div class="welcome" th:fragment="welcome">
+    <span sec:authorize="isAuthenticated()">Welcome <span sec:authentication="name"></span></span>
+</div>
 
 </body>
 </html>

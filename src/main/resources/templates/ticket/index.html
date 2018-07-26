@@ -26,8 +26,15 @@
                     </div>
                 </div>
                 </br>
-
-                <form method="get">
+                <div th:if="${param.error}">
+                    <label style="color:red">Invalid username and password.</label>
+                </div>
+                <div th:if="${param.logout}">
+                    <label>
+                        You have been logged out.
+                    </label>
+                </div>
+                <form th:action="@{/login}" method="post">
                     <div class="form-row justify-content-center">
                         <div class="col-md-3">
                             <input class="form-control" type="text" name="username" placeholder="User Name" />
@@ -37,7 +44,7 @@
                             <input class="form-control" type="password" name="password" placeholder="Password" />
                         </div>
                         <div class="col-md-2">
-                            <input class="btn btn-outline-secondary form-control" type="button" value="Log In!" />
+                            <input class="btn btn-outline-secondary form-control" type="submit" value="Log In!" />
                         </div>
                     </div>
                 </form>
