@@ -21,6 +21,10 @@ public class AssignedGroup {
     @JoinColumn(name = "group_id")
     private List<Ticket> tickets = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<User> groupUsers = new ArrayList<>();
+
     @Transient
     private List<AssignedGroup> allGroups = new ArrayList<>();
 
@@ -53,6 +57,12 @@ public class AssignedGroup {
         this.groupName = groupName;
     }
 
+    public List<User> getGroupUsers() {
+        return groupUsers;
+    }
 
+    public void setGroupUsers(List<User> groupUsers) {
+        this.groupUsers = groupUsers;
+    }
 }
 

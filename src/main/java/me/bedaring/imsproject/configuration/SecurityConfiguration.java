@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -30,12 +31,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public SecurityConfiguration(CustomUserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userDetailsService = userDetailsService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
-                .passwordEncoder(getPasswordEncoder());
+                .passwordEncoder(bCryptPasswordEncoder);
     }
 
 
@@ -55,6 +62,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         };
     }
 
+
+    public PasswordEncoder passwordEncoder(){
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder;
+    }
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -62,14 +75,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/css/**").permitAll()
                     .antMatchers("/js/**").permitAll()
-                    .antMatchers("/ticket/main").permitAll()
+                    .antMatchers("/ticket").permitAll()
+                    //.antMatchers("/admin/**").permitAll()
+                //.antMatchers("/ticket/main").permitAll()
                     .antMatchers("/ticket/view/**").permitAll()
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     //.antMatchers("/ticket/create").hasAnyRole("SUPPORT", "ADMIN")
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
-                    .loginPage("/login")
+
                     .defaultSuccessUrl("/ticket/main")
                     .permitAll()
                     .and()

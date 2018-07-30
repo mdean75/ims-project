@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www/thymeleaf.org">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title>Incident Management System </title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+<body>
+<div class="container" id="top">
+    <nav th:replace="fragments :: top-nav"></nav>
+        <div class="row justify-content-center">
+            <div class="card border-primary col-sm-8 bg-light">
+                <div class="card-body text-dark mb-3">
+                    <h1 class="text-center">Incident Management System</h1>
+                    <h2 class="text-center">Add User</h2>
+                    <div class="row justify-content-center">
+                        <div class="message col-md-6">
+
+                            <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
+
+                        </div>
+
+                    </div>
+                    <div >
+                        <form method="post" th:object="${user}">
+
+
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>First Name</label>
+                                    <input class="form-control" th:field="*{firstName}" />
+                                    <small style="color: red;" th:errors="*{firstName}"></small>
+                                </div>
+                                <div class="form-group col">
+                                    <label>Last Name</label>
+                                    <input class="form-control" th:field="*{lastName}" />
+                                    <small style="color: red;" th:errors="*{lastName}"></small>
+                                </div>
+
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Username</label>
+                                    <input class="form-control" th:field="*{username}" />
+                                    <small style="color: red;" th:errors="*{username}"></small>
+                                </div>
+                                <div class="form-group col">
+                                    <label>Email</label>
+                                    <input class="form-control" th:field="*{email}" />
+                                    <small style="color: red;" th:errors="*{email}"></small>
+                                </div>
+                                <div class="form-group col" >
+                                    <label>Group</label>
+                                    <select class="form-control" name="groupId">
+                                        <option>Select Group</option>
+                                        <option th:each="group : ${groups}"
+                                                th:value="${group.id}"
+                                                th:text="${group.groupName}"></option>
+                                    </select>
+                                    <small style="color: red;" th:errors="*{groupId}"></small>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Phone</label>
+                                    <input type="number" class="form-control" th:field="*{phone}" />
+                                    <small style="color: red;" th:errors="*{phone}"></small>
+                                </div>
+                                <div class="form-group col">
+                                    <label>Carrier</label>
+                                    <select class="form-control" name="carrierId">
+                                        <option>Select Carrier</option>
+                                        <option th:each="carrier : ${carriers}"
+                                                th:value="${carrier.id}"
+                                                th:text="${carrier.carrierName}"></option>
+
+                                    </select>
+
+                                    <small style="color: red;" th:errors="*{carrierId}"></small>
+                                </div>
+
+                            </div>
+                            <label>Select Roles</label></br>
+                            <div class="form-row">
+
+                                <div th:each="role : ${roles}" class="form-check">
+                                    <div class="col">
+                                        <input type="checkbox" class="form-check-input" th:field="*{roles}" th:value="${role.roleId}" />
+                                        <label th:text="${role.role}"></label></br>
+                                    </div>
+                                    <small style="color: red;" th:errors="*{roles}"></small>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group" style="margin: auto;">
+                                    <input type="submit" class="btn btn-danger" value="Add new" />
+                                    <a href="/admin/menu" class="btn btn-info">Cancel </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+</body>
+</html>

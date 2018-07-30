@@ -1,14 +1,10 @@
 package me.bedaring.imsproject.controllers;
 
-import me.bedaring.imsproject.models.AssignedGroup;
-import me.bedaring.imsproject.models.Category;
-import me.bedaring.imsproject.models.Severity;
-import me.bedaring.imsproject.models.Ticket;
-import me.bedaring.imsproject.models.data.CategoryDao;
-import me.bedaring.imsproject.models.data.GroupDao;
-import me.bedaring.imsproject.models.data.ImsDao;
-import me.bedaring.imsproject.models.data.SeverityDao;
+import me.bedaring.imsproject.models.*;
+import me.bedaring.imsproject.models.data.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -19,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +38,15 @@ public class AdminController {
 
     @Autowired
     private ImsDao imsDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private CarrierDao carrierDao;
+
+    @Autowired
+    private RoleDao roleDao;
 
     SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
@@ -279,6 +286,45 @@ public class AdminController {
         }
         severityDao.deleteById(severity.getId());
         message.addFlashAttribute("message", "Severity Successfully Deleted!");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "user/add", method = RequestMethod.GET)
+    public String displayAddUser(Model model) {
+        model.addAttribute("title", "IMS - Add User");
+        model.addAttribute("subtitle", "Add User");
+        model.addAttribute("user", new User());
+        model.addAttribute("carriers", carrierDao.findAll());
+        model.addAttribute("groups", groupDao.findAll());
+        model.addAttribute("roles", roleDao.findAll());
+        model.addAttribute("date", format.format(new Date()));
+        return "admin/user/add";
+    }
+
+    @RequestMapping(value = "user/add", method = RequestMethod.POST)
+    public String processAddUser(@Valid @ModelAttribute("user") User user, Errors errors,
+                                 RedirectAttributes message, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "IMS - Add User");
+            model.addAttribute("subtitle", "Add User");
+            //model.addAttribute("user", new User());
+            model.addAttribute("carriers", carrierDao.findAll());
+            model.addAttribute("groups", groupDao.findAll());
+            model.addAttribute("roles", roleDao.findAll());
+            model.addAttribute("date", format.format(new Date()));
+            return "admin/user/add";
+        }
+
+
+
+        user.setPassword(User.createRandomHashedPassword());
+        try {
+            userDao.save(user);
+            message.addFlashAttribute("message", "Successfully Added New User");
+        } catch (ConstraintViolationException e) {
+            System.out.println("there was a constraint error: " + e.getConstraintViolations());
+        }
+
         return "redirect:/admin/menu";
     }
 }

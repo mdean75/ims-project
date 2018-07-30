@@ -10,15 +10,16 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fh-3.1.3/r-2.2.1/datatables.min.css"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
 
 </head>
 <body>
@@ -33,6 +34,49 @@
             <p><a href="/logout"><b>Logout</b></a> </p>
         </div>
     </div>
+</nav>
+
+<nav th:fragment="top-nav" class="navbar navbar-expand-lg navbar-light bg-light border border-primary">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link active" href="/ticket/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/ticket/create">Create Ticket</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/ticket/list">List Tickets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/ticket/main">Main</a>
+            </li>
+            <li class="nav-item">
+                <a sec:authorize="hasRole('ADMIN')" class="nav-link" href="/admin/menu">Admin Menu</a>
+            </li>
+
+
+        </ul>
+
+
+        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+            <li class="nav-item nav-link">Logged in user: <span sec:authentication="name"></span></li>
+
+
+        </ul>
+        <ul class="navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link" href="/logout"><button class="btn btn-sm btn-outline-danger">Logout</button></a>
+            </li>
+        </ul>
+    </div>
+
+
+    </div><br><br>
 </nav>
 
 <div class="welcome" th:fragment="welcome">

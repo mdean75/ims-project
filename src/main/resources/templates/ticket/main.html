@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:form="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:form="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments :: head">
     <meta charset="UTF-8" />
     <title>Incident Management System Main</title>
@@ -10,10 +11,13 @@
 </head>
 <body>
 <div class="container" id="top">
-    <div class="row">
-    <nav th:replace="fragments :: side-nav"></nav>
-        <div class="justify-content-center col-sm-8">
-            <div class="card border-primary bg-light">
+    <nav th:replace="fragments :: top-nav"></nav>
+
+
+
+
+        <div class="row justify-content-center">
+            <div class="card border-primary col-sm-8 bg-light">
                 <div class="card-body text-dark mb-3">
                     <h1 class="text-center">Incident Management System</h1>
                     <div class="row justify-content-center">
@@ -47,7 +51,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
 </div>
 </body>
 </html>

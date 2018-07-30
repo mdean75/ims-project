@@ -4,11 +4,11 @@
     </head>
 <body>
 <div class="container" id="top">
-    <div class="row">
-        <nav th:replace="fragments :: side-nav"></nav>
+    <nav th:replace="fragments :: top-nav"></nav>
 
-    <div class="justify-content-center col-sm-8">
-        <div class="card border-primary bg-light">
+
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
             <div class="card-body text-dark mb-3">
                 <h1 class="text-center">Incident Management System</h1>
                 <h2 class="text-center">Administrative Functions</h2>
@@ -24,6 +24,7 @@
                                     <a class="dropdown-item" href="category/add">Category</a>
                                     <a class="dropdown-item" href="group/add">Group</a>
                                     <a class="dropdown-item" href="severity/add">Severity</a>
+                                    <a class="dropdown-item" href="user/add">User</a>
 
                                 </div>
                             </div>
@@ -34,6 +35,7 @@
                                     <a class="dropdown-item" href="category/update">Category</a>
                                     <a class="dropdown-item" href="group/update">Group</a>
                                     <a class="dropdown-item" href="severity/update">Severity</a>
+                                    <a class="dropdown-item" href="#">User</a>
 
                                 </div>
                             </div>
@@ -44,6 +46,7 @@
                                     <a class="dropdown-item" href="category/delete">Category</a>
                                     <a class="dropdown-item" href="group/delete">Group</a>
                                     <a class="dropdown-item" href="severity/delete">Severity</a>
+                                    <a class="dropdown-item" href="#">User</a>
 
                                 </div>
                             </div>

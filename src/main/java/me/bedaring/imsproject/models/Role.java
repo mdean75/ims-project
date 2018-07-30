@@ -1,20 +1,31 @@
 package me.bedaring.imsproject.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
+@Table(name = "role")
 public class Role {
 
     @Id
-    @GeneratedValue
-    @Column
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "role_id")
     private int roleId;
 
-    @Column
+    @Column(name = "role")
     private String role;
+
+
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(
+                    name = "roles_role_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "user_id"))
+    private Set<User> users;
 
     public Role() {
     }
@@ -33,5 +44,13 @@ public class Role {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

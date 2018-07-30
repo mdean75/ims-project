@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="container" id="top">
+    <nav sec:authorize="isAuthenticated()" th:replace="fragments :: top-nav"></nav>
     <div class="row justify-content-center">
         <div class="card border-primary col-sm-8 bg-light">
             <div class="card-body text-dark mb-3">
@@ -34,7 +35,7 @@
                         You have been logged out.
                     </label>
                 </div>
-                <form th:action="@{/login}" method="post">
+                <form sec:authorize="isAnonymous()" th:action="@{/login}" method="post">
                     <div class="form-row justify-content-center">
                         <div class="col-md-3">
                             <input class="form-control" type="text" name="username" placeholder="User Name" />

@@ -4,12 +4,16 @@ import me.bedaring.imsproject.models.*;
 import me.bedaring.imsproject.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -32,6 +36,7 @@ public class TicketController {
     private StatusDao statusDao;
 
 
+    @PreAuthorize("permitAll()")
     @RequestMapping(value="")
     public String index(Model model) {
         model.addAttribute("title", "IMS - Home");
@@ -40,7 +45,17 @@ public class TicketController {
 
     @RequestMapping(value = "main", method = RequestMethod.GET)
     public String main(Model model) {
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
         model.addAttribute("title", "IMS - Main");
+        model.addAttribute("username", username);
         return "ticket/main";
     }
 
@@ -51,7 +66,9 @@ public class TicketController {
     }
 
     @RequestMapping(value = "list")
-    public String list(Model model) {
+    public String list(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+        model.addAttribute("username", customUserDetails.getUsername());
+        model.addAttribute("roles", customUserDetails.getRoles());
         model.addAttribute("tickets", imsDao.findAll());
         model.addAttribute("title", "IMS - List Tickets");
         model.addAttribute("severities", severityDao.findAll());
@@ -100,12 +117,13 @@ public class TicketController {
         newTicket.setSeverity(displaySeverity);
         newTicket.setCategoryMain(category);
         newTicket.setStatus(statusD);
+        newTicket.setLog(new Date() + newTicket.getLog());
 
         imsDao.save(newTicket);
         return "redirect:/ticket/main";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPORT')")
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String displayCreateTicket(Model model) {
         model.addAttribute("title", "IMS - Create Ticket");

@@ -1,13 +1,18 @@
 package me.bedaring.imsproject.models;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "user")
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
 
     @Column(nullable = false, unique = true)
@@ -21,15 +26,25 @@ public class User {
 
     private String email;
 
-    private int phone;
+    private String phone;
 
-    private int carrierId;
+    @ManyToOne
+    private AssignedGroup groupId;
+
+    @ManyToOne
+    private Carrier carrierId;
 
     private int active;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(
+                    name = "user_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "roles_role_id"))
     private Set<Role> roles;
+
 
     public User() {
     }
@@ -45,6 +60,7 @@ public class User {
         this.active = user.getActive();
         this.roles = user.getRoles();
         this.id = user.getId();
+        this.groupId = user.getGroupId();
     }
 
     public int getId() {
@@ -95,19 +111,19 @@ public class User {
         this.email = email;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public int getCarrierId() {
+    public Carrier getCarrierId() {
         return carrierId;
     }
 
-    public void setCarrierId(int carrierId) {
+    public void setCarrierId(Carrier carrierId) {
         this.carrierId = carrierId;
     }
 
@@ -125,5 +141,26 @@ public class User {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public AssignedGroup getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(AssignedGroup groupId) {
+        this.groupId = groupId;
+    }
+
+    public static String createRandomHashedPassword(){
+        // create hashed password
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String password = RandomStringUtils.random(24, characters);
+
+        System.out.println(password);
+
+        System.out.println(BCrypt.hashpw(password, BCrypt.gensalt()));
+
+
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 }
