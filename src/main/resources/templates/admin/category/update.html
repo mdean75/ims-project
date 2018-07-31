@@ -9,10 +9,11 @@
 </head>
 <body>
 <div class="container" id="top">
-    <div class="row">
-        <nav th:replace="fragments :: side-nav"></nav>
-        <div class="justify-content-center col-sm-8">
-            <div class="card border-primary bg-light">
+    <nav th:replace="fragments :: top-nav"></nav>
+
+
+        <div class="row justify-content-center">
+            <div class="card border-primary col-sm-8 bg-light">
                 <div class="card-body text-dark mb-3">
                     <h1 class="text-center">Incident Management System</h1>
                     <h2 class="text-center" th:text="${subtitle}"></h2>

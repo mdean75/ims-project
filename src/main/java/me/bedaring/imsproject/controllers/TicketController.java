@@ -4,15 +4,18 @@ import me.bedaring.imsproject.models.*;
 import me.bedaring.imsproject.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
@@ -35,11 +38,14 @@ public class TicketController {
     @Autowired
     private StatusDao statusDao;
 
+    SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
+
 
     @PreAuthorize("permitAll()")
     @RequestMapping(value="")
     public String index(Model model) {
         model.addAttribute("title", "IMS - Home");
+        model.addAttribute("date", format.format(new Date()));
         return "ticket/index";
     }
 
@@ -56,12 +62,14 @@ public class TicketController {
 
         model.addAttribute("title", "IMS - Main");
         model.addAttribute("username", username);
+        model.addAttribute("date", format.format(new Date()));
         return "ticket/main";
     }
 
     @RequestMapping(value = "main", method = RequestMethod.POST)
     public String mainPost(Model model, @RequestParam int id) {
         model.addAttribute("title", "IMS - Main");
+        model.addAttribute("date", format.format(new Date()));
         return "redirect:/ticket/view/"+id;
     }
 
@@ -72,6 +80,7 @@ public class TicketController {
         model.addAttribute("tickets", imsDao.findAll());
         model.addAttribute("title", "IMS - List Tickets");
         model.addAttribute("severities", severityDao.findAll());
+        model.addAttribute("date", format.format(new Date()));
         return "ticket/list";
     }
 
@@ -88,6 +97,7 @@ public class TicketController {
         model.addAttribute("maincategory", categoryDao.findCategoryByCategoryTypeEquals("Main"));
         model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
         model.addAttribute("statuses", statusDao.findAll());
+        model.addAttribute("date", format.format(new Date()));
         return "ticket/view";
     }
 
@@ -103,6 +113,7 @@ public class TicketController {
             model.addAttribute("severities", severityDao.findAll());
             model.addAttribute("categories", categoryDao.findAll());
             model.addAttribute("statuses", statusDao.findAll());
+            model.addAttribute("date", format.format(new Date()));
             return "ticket/view";
         }
 
@@ -117,7 +128,11 @@ public class TicketController {
         newTicket.setSeverity(displaySeverity);
         newTicket.setCategoryMain(category);
         newTicket.setStatus(statusD);
-        newTicket.setLog(new Date() + newTicket.getLog());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String user = authentication.getName();
+        newTicket.setLog(newTicket.getLog().append("\n").append(new Date()).append(" updated by: ").append(user)
+                .append("\n").append(newTicket.getUpdate()));
 
         imsDao.save(newTicket);
         return "redirect:/ticket/main";
@@ -134,6 +149,7 @@ public class TicketController {
         model.addAttribute("subcategory", categoryDao.findCategoryByCategoryTypeEquals("Sub"));
         model.addAttribute("maincategory", categoryDao.findCategoryByCategoryTypeEquals("Main"));
         model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
+        model.addAttribute("date", format.format(new Date()));
         return "ticket/create";
     }
 
@@ -152,6 +168,7 @@ public class TicketController {
             model.addAttribute("maincategory", categoryDao.findCategoryByCategoryTypeEquals("Main"));
             model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
             model.addAttribute("statuses", statusDao.findAll());
+            model.addAttribute("date", format.format(new Date()));
             return "ticket/create";
         }
 

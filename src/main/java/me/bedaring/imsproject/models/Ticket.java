@@ -56,12 +56,14 @@ public class Ticket {
     @Size(min=1, message = "Field cannot be empty")
     private String locationDetail;
     @Column(length = 65535, columnDefinition = "Text")
-    private String log;
+    private StringBuilder log;
+    @Transient
+    private String update;
 
     public Ticket(LocalDateTime createTimestamp, LocalDateTime updateTimestamp, Category categoryMain, Category categorySub, Category categoryDetail, String title,
                   String description, AssignedGroup assignedGroup, String assignedPerson, Severity severity, Status status,
                   String requestorName, String requestorPhone, String requestorEmail, String location,
-                  String locationDetail, String log) {
+                  String locationDetail, StringBuilder log) {
 
         this.categoryMain = categoryMain;
         this.categorySub = categorySub;
@@ -234,11 +236,11 @@ public class Ticket {
 
     }
 
-    public String getLog() {
+    public StringBuilder getLog() {
         return log;
     }
 
-    public void setLog(String log) {
+    public void setLog(StringBuilder log) {
         this.log = log;
     }
 
@@ -246,5 +248,13 @@ public class Ticket {
     }
 
     public void setCategoryDetail(Optional<Category> detailCategory) {
+    }
+
+    public String getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(String update) {
+        this.update = update;
     }
 }
