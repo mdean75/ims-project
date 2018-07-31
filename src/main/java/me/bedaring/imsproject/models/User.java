@@ -151,16 +151,16 @@ public class User {
         this.groupId = groupId;
     }
 
-    public static String createRandomHashedPassword(){
+    public static String createRandomPassword(int length){
         // create hashed password
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        String password = RandomStringUtils.random(24, characters);
+        String password = RandomStringUtils.random(length, characters);
 
         System.out.println(password);
 
         System.out.println(BCrypt.hashpw(password, BCrypt.gensalt()));
 
 
-        return BCrypt.hashpw(password, BCrypt.gensalt());
+        return password;
     }
 }

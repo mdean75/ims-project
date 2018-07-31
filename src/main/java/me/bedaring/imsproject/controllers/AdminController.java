@@ -1,8 +1,9 @@
 package me.bedaring.imsproject.controllers;
 
+import me.bedaring.imsproject.EmailService;
+import me.bedaring.imsproject.Mail;
 import me.bedaring.imsproject.models.*;
 import me.bedaring.imsproject.models.data.*;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
@@ -17,11 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("admin")
@@ -47,6 +45,9 @@ public class AdminController {
 
     @Autowired
     private RoleDao roleDao;
+
+    @Autowired
+    private EmailService emailService;
 
     SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
@@ -221,6 +222,7 @@ public class AdminController {
     @RequestMapping(value = "group/delete", method = RequestMethod.POST)
     public String processDeleteGroup(@ModelAttribute AssignedGroup assignedGroup,
                                      RedirectAttributes message, Model model) {
+        // TODO: 7/30/18 add delete confirmation
         // check if any parent records exist for the group to be deleted, if any are present disallow delete and display message
         int count = imsDao.countTicketByAssignedGroup(assignedGroup);
         if (count > 0) {
@@ -247,6 +249,7 @@ public class AdminController {
 
     @RequestMapping(value = "category/delete", method = RequestMethod.POST)
     public String processDeleteCategory(@ModelAttribute Category category, RedirectAttributes message, Model model) {
+        // TODO: 7/30/18 add delete confirmation
         // check if any parent records exist for the category to be deleted, if any are present disallow delete and display message
 
         int count = imsDao.countTicketByCategory(category);
@@ -274,6 +277,7 @@ public class AdminController {
 
     @RequestMapping(value = "severity/delete", method = RequestMethod.POST)
     public String processDeleteSeverity(@ModelAttribute Severity severity, RedirectAttributes message, Model model) {
+        // TODO: 7/30/18 add delete confirmation
         // check if any parent records exist for the severity to be deleted, if any are present disallow delete and display message
         int count = imsDao.countTicketBySeverity(severity);
         if (count > 0) {
@@ -317,10 +321,21 @@ public class AdminController {
 
 
 
-        user.setPassword(User.createRandomHashedPassword());
+        String plainPassword = User.createRandomPassword(24);
+        user.setPassword(BCrypt.hashpw(plainPassword, BCrypt.gensalt()));
         try {
             userDao.save(user);
             message.addFlashAttribute("message", "Successfully Added New User");
+            Mail mail = new Mail();
+            mail.setFrom("user-creation@bedaring.me");
+            mail.setTo("deangelomp@gmail.com");
+            mail.setSubject("New account setup");
+            mail.setContent("A new user account has been created for you.  Please use the following credentials " +
+                    "for initial login.\n\n\t" + user.getUsername() + "\n\t" + plainPassword);
+
+            emailService.sendSimpleMessage(mail);
+
+            message.addFlashAttribute("New user email sent");
         } catch (ConstraintViolationException e) {
             System.out.println("there was a constraint error: " + e.getConstraintViolations());
         }
