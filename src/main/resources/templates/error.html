@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div class="container" id="top">
+    <div class="row justify-content-center">
+        <img class="img-responsive col-md-8" alt="arrows" th:src="@{/images/arrows.png}" />
+        <h1>OOPS ... Looks like something went wrong</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-4 offset-md-5">
+            <a th:href="@{/ticket}" class="btn btn-lg btn-outline-dark">Home</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
