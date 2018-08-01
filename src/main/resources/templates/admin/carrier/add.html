@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www/thymeleaf.org">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title>Incident Management System </title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+<body>
+<div class="container" id="top">
+    <nav th:replace="fragments :: top-nav"></nav>
+        <div class="row justify-content-center">
+            <div class="card border-primary col-sm-8 bg-light">
+                <div class="card-body text-dark mb-3">
+                    <h1 class="text-center">Incident Management System</h1>
+                    <h2 class="text-center" th:text="${subtitle}"></h2>
+                    <div class="row justify-content-center">
+                        <div class="message col-md-6">
+
+                            <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-8 offset-md-2">
+                        <form method="post" th:object="${carrier}">
+
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Carrier Name</label>
+                                    <input class="form-control" th:field="*{carrierName}" />
+                                    <small style="color: red;" th:errors="*{carrierName}"></small>
+                                </div>
+                            </div>
+                            <div class="form-row">
+
+                                <div class="form-group col">
+                                    <label>Carrier Domain</label>
+                                    <input class="form-control" th:field="*{carrierDomain}" />
+                                    <small style="color: red;" th:errors="*{carrierDomain}"></small>
+                                </div>
+
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group" style="margin: auto;">
+                                    <input type="submit" class="btn btn-danger" value="Add new" />
+                                    <a href="/admin/menu" class="btn btn-info">Cancel </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

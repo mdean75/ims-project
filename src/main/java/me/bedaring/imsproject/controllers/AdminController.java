@@ -342,4 +342,82 @@ public class AdminController {
 
         return "redirect:/admin/menu";
     }
+
+    @RequestMapping(value = "carrier/add", method = RequestMethod.GET)
+    public String displayAddCarrier(Model model) {
+        model.addAttribute("title", "IMS - Add Carrier");
+        model.addAttribute("subtitle", "Add Carrier");
+        model.addAttribute("carrier", new Carrier());
+        model.addAttribute("date", format.format(new Date()));
+        return "admin/carrier/add";
+    }
+
+    @RequestMapping(value = "carrier/add", method = RequestMethod.POST)
+    public String processAddCarrier(@Valid @ModelAttribute("carrier") Carrier carrier, Errors errors,  Model model,
+                                     RedirectAttributes message) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "IMS - Add Carrier");
+
+            model.addAttribute("date", format.format(new Date()));
+            return "admin/carrier/add";
+        }
+        carrierDao.save(carrier);
+        message.addFlashAttribute("message", "New carrier added successfully");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "carrier/update", method = RequestMethod.GET)
+    public String listUpdateCarrier(@ModelAttribute Carrier carrier, Model model) {
+        model.addAttribute("title", "IMS - Update Carrier");
+        model.addAttribute("subtitle", "Update Carrier");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("carriers", carrierDao.findAll());
+        return "admin/carrier/update";
+
+    }
+
+    @RequestMapping(value = "carrier/update", method = RequestMethod.POST)
+    public String processUpdateCarrier(@Valid @ModelAttribute Carrier carrier,
+                                     Errors errors, RedirectAttributes message, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "IMS - Update Carrier");
+            model.addAttribute("subtitle", "Update Carrier");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("carriers", carrierDao.findAll());
+            model.addAttribute(message.addFlashAttribute("message", "Field cannot be empty"));
+            return "redirect:/admin/carrier/update";
+        }
+
+        carrierDao.save(carrier);
+        message.addFlashAttribute("message", "Carrier Successfully Updated!");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "carrier/delete", method = RequestMethod.GET)
+    public String listDeleteCarriers(@ModelAttribute Carrier carrier, Model model) {
+        model.addAttribute("title", "IMS - Delete Carrier");
+        model.addAttribute("subtitle", "Delete Carrier");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("carriers", carrierDao.findAll());
+        return "admin/carrier/delete";
+    }
+
+    @RequestMapping(value = "carrier/delete", method = RequestMethod.POST)
+    public String processDeleteCarriers(@ModelAttribute Carrier carrier,
+                                     RedirectAttributes message, Model model) {
+        // TODO: 7/30/18 add delete confirmation
+        // check if any parent records exist for the group to be deleted, if any are present disallow delete and display message
+        int count = userDao.countUserByCarrierId(carrier);
+        if (count > 0) {
+            model.addAttribute("title", "IMS - Delete Carrier");
+            model.addAttribute("subtitle", "Delete Carrier");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("carriers", carrierDao.findAll());
+            model.addAttribute(message.addFlashAttribute("message", "Field is in use and cannot be deleted"));
+            return "redirect:/admin/carrier/delete";
+        }
+        carrierDao.deleteById(carrier.getId());
+        message.addFlashAttribute("message", "Carrier Successfully Deleted!");
+        return "redirect:/admin/menu";
+    }
 }

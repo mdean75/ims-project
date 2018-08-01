@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www/thymeleaf.org">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title>Incident Management System </title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+<body>
+<div class="container" id="top">
+    <nav th:replace="fragments :: top-nav"></nav>
+
+
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
+            <div class="card-body text-dark mb-3">
+                <h1 class="text-center">Incident Management System</h1>
+                <h2 class="text-center" th:text="${subtitle}"></h2>
+                <div class="row justify-content-center">
+                    <div class="message col-md-6">
+
+                        <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
+                        <p class="text-center" style="color: red;" th:text="${message}"></p>
+
+                    </div>
+
+                </div>
+                <div class="container">
+                    <div class="row">
+
+                        <h4 class="col-md-1">ID</h4>
+
+                        <h4 class="col-md-3 offset-md-1">Carrier Name</h4>
+
+                        <h4 class="col-md-3 offset-md-1">Carrier Domain</h4>
+
+                        <h4 class="col-md-2 offset-md-1">Action</h4>
+                    </div>
+
+                    <div th:each="aCarrier : ${carriers}">
+                        <form method="post" th:object="${carrier}">
+                            <div class="form-row">
+                                <input class="col-md-1 form-control" type="text" readonly="readonly" id="id" name="id" th:value="${aCarrier.id}"/>
+                                <input class="col-md-3 offset-md-1 form-control" type="text" name="carrierName" id="carrierName" th:value="${aCarrier.carrierName}"/>
+                                <input class="col-md-3 offset-md-1 form-control" type="text" name="carrierDomain" id="carrierDomain" th:value="${aCarrier.carrierDomain}" />
+                                <input class="col-md-2 offset-md-1 form-control btn btn-outline-danger" type="submit" value="Update" />
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -13,6 +13,8 @@ public class Carrier {
 
     private String carrierName;
 
+    private String carrierDomain;
+
     @OneToMany
     @JoinColumn(name = "carrier_id")
     private List<User> carrierUsers = new ArrayList<>();
@@ -42,5 +44,13 @@ public class Carrier {
 
     public void setCarrierUsers(List<User> carrierUsers) {
         this.carrierUsers = carrierUsers;
+    }
+
+    public String getCarrierDomain() {
+        return carrierDomain;
+    }
+
+    public void setCarrierDomain(String carrierDomain) {
+        this.carrierDomain = carrierDomain;
     }
 }
