@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div class="container" id="top">
+    <nav th:replace="fragments :: top-nav"></nav>
+
+
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
+            <div class="card-body text-dark mb-3">
+                <h1 class="text-center">Incident Management System</h1>
+                <h2 class="text-center" th:text="${subtitle}"></h2>
+                <div class="row justify-content-center">
+                    <div class="message col-md-6">
+                        <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
+                    </div>
+                </div>
+
+                <div class="col-md-8 offset-md-2">
+                    <p class="text-center" style="color: red;" th:text="${message}"></p>
+
+                    <form method="post" action="/password-change" th:object="${user}">
+
+
+                        <div class="form-row">
+                            <label>Change Password</label>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>New Password</small>
+                                <input class="form-control" th:field="*{newPassword}"/>
+                                <small style="color: red;" th:errors="*{newPassword}"></small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>Verify New Password</small>
+                                <input class="form-control" th:field="*{verifyPassword}" />
+                                <small style="color: red;" th:errors="*{verifyPassword}"></small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>Current Password</small>
+                                <input class="form-control" th:field="*{password}"/>
+                                <small style="color: red;" th:errors="*{password}"></small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="margin: auto;" >
+                                <input type="submit" class="btn btn-danger" value="Update" />
+                                <a href="/admin/menu" class="btn btn-info">Cancel </a>
+                            </div>
+                        </div>
+                    </form>
+                        <hr/>
+                    <form method="post" action="/profile-update">
+                        <div class="form-row">
+                            <label>Mobile Phone</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>Phone Number</small>
+                                <input class="form-control" />
+                                <small style="color: red;"></small>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>Carrier</small>
+                                <select class="form-control">
+                                    <option>Select Carrier</option>
+                                    <option>AT&T</option>
+                                    <option>Verizon</option>
+                                </select>
+                                <small style="color: red;"></small>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="margin: auto;" >
+                                <input type="submit" class="btn btn-danger" value="Update" />
+                                <a href="/admin/menu" class="btn btn-info">Cancel </a>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

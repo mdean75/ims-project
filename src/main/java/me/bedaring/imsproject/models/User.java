@@ -4,6 +4,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
@@ -18,6 +20,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Size(min=1, message = "Field cannot be empty")
     private String password;
 
     private String firstName;
@@ -27,6 +30,14 @@ public class User {
     private String email;
 
     private String phone;
+
+    @Transient
+    @Size(min=1, message = "Field cannot be empty")
+    private String newPassword;
+
+    @Transient
+    @Size(min=1, message = "Field cannot be empty")
+    private String verifyPassword;
 
     @ManyToOne
     private AssignedGroup groupId;
@@ -149,6 +160,22 @@ public class User {
 
     public void setGroupId(AssignedGroup groupId) {
         this.groupId = groupId;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getVerifyPassword() {
+        return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
     }
 
     public static String createRandomPassword(int length){

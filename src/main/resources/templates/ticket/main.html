@@ -27,6 +27,7 @@
                             <a href="create"> <button class="btn btn-outline-primary">New Ticket</button></a>
                             <a href="list"><button class="btn btn-outline-primary">List Tickets</button></a>
                             <button class="btn btn-warning">Reporting</button></br></br>
+                            <p class="text-center" style="color: red;" th:text="${message}"></p>
 
                             <form method="post">
                                 <div class="form-row justify-content-center">
@@ -43,7 +44,7 @@
                             </form>
                             </br></br>
 
-                            <button class="btn btn-outline-success">Update Profile</button>
+                            <a href="/profile"><button class="btn btn-outline-success">Update Profile</button></a>
                             <a href="/admin/menu"><button class="btn btn-outline-danger">Admin Functions</button></a>
 
                         </div>
