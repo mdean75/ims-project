@@ -4,14 +4,15 @@ import me.bedaring.imsproject.EmailService;
 import me.bedaring.imsproject.Mail;
 import me.bedaring.imsproject.models.CustomUserDetails;
 import me.bedaring.imsproject.models.User;
+import me.bedaring.imsproject.models.data.CarrierDao;
 import me.bedaring.imsproject.models.data.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,9 @@ public class ImsController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private CarrierDao carrierDao;
 
     SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
@@ -56,17 +60,21 @@ public class ImsController {
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String displayProfileUpdate(Model model) {
+    public String displayProfileUpdate(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         model.addAttribute("title", "IMS - Update Profile");
         model.addAttribute("subtitle", "Update Profile");
         model.addAttribute("date", format.format(new Date()));
-        model.addAttribute("user", new User());
+        //model.addAttribute("user", new User());
+        model.addAttribute("user", userDao.findById(customUserDetails.getId()));
+        model.addAttribute("carriers", carrierDao.findAll());
         return "/profile";
     }
 
     @RequestMapping(value = "/password-change", method = RequestMethod.POST)
-    public String processUpdatePassword(@ModelAttribute User user, @RequestParam String newPassword, @AuthenticationPrincipal CustomUserDetails customUserDetails,
+    public String processUpdatePassword(@Valid @ModelAttribute User user,
+                                        @AuthenticationPrincipal CustomUserDetails customUserDetails,
                                         Model model, RedirectAttributes message) {
+
         BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder(11);
 
         // check to ensure the user entered all password fields
@@ -98,7 +106,7 @@ public class ImsController {
             return "/profile";
         // all verifications passed, process the password change
         }else {
-            userDao.updateUserById(bCrypt.encode(newPassword), customUserDetails.getId());
+            userDao.updatePasswordById(bCrypt.encode(user.getNewPassword()), customUserDetails.getId());
             message.addFlashAttribute("message", "Successfully changed password");
 
             return "redirect:/ticket/main";
@@ -107,8 +115,21 @@ public class ImsController {
     }
 
     @RequestMapping(value = "/profile-update", method = RequestMethod.POST)
-    public String processUpdateProfile(Model model, RedirectAttributes message) {
-        message.addFlashAttribute("message", "password change controller");
+    public String processUpdateProfile(@Valid @ModelAttribute User user, Errors errors,
+                                       @AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                       Model model, RedirectAttributes message) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "IMS - Update Profile");
+            model.addAttribute("subtitle", "Update Profile");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("carriers", carrierDao.findAll());
+            //model.addAttribute("user", new User());
+           // model.addAttribute("user", userDao.findById(customUserDetails.getId()));
+            return "/profile";
+        }
+        userDao.updatePhoneById(user.getPhone(), user.getCarrierId().getId(), customUserDetails.getId());
+        message.addFlashAttribute("message", "Updated profile");
+
         return "redirect:/ticket/main";
     }
 }

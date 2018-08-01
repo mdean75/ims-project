@@ -45,27 +45,28 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <small>Current Password</small>
-                                <input class="form-control" th:field="*{password}"/>
+                                <input class="form-control" name="password" />
                                 <small style="color: red;" th:errors="*{password}"></small>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group" style="margin: auto;" >
                                 <input type="submit" class="btn btn-danger" value="Update" />
-                                <a href="/admin/menu" class="btn btn-info">Cancel </a>
+                                <a href="/ticket/main" class="btn btn-info">Cancel </a>
                             </div>
                         </div>
                     </form>
                         <hr/>
-                    <form method="post" action="/profile-update">
+                    <form method="post" action="/profile-update" th:object="${user}">
+
                         <div class="form-row">
                             <label>Mobile Phone</label>
                         </div>
                         <div class="form-row">
                             <div class="form-group col">
                                 <small>Phone Number</small>
-                                <input class="form-control" />
-                                <small style="color: red;"></small>
+                                <input class="form-control" th:field="*{phone}" />
+                                <small style="color: red;" th:errors="*{phone}"></small>
                             </div>
                         </div>
 
@@ -73,10 +74,13 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <small>Carrier</small>
-                                <select class="form-control">
-                                    <option>Select Carrier</option>
-                                    <option>AT&T</option>
-                                    <option>Verizon</option>
+                                <select th:field="*{carrierId}" class="custom-select">
+
+                                    <option th:each="carrier : ${carriers}"
+                                            th:value="${carrier.id}"
+                                            th:text="${carrier.carrierName}"
+                                            th:selected="(${{user.carrierId.id}} == ${carrier.id})"></option>
+
                                 </select>
                                 <small style="color: red;"></small>
                             </div>
@@ -85,7 +89,7 @@
                         <div class="form-row">
                             <div class="form-group" style="margin: auto;" >
                                 <input type="submit" class="btn btn-danger" value="Update" />
-                                <a href="/admin/menu" class="btn btn-info">Cancel </a>
+                                <a href="/ticket/main" class="btn btn-info">Cancel </a>
                             </div>
                         </div>
                     </form>

@@ -1,6 +1,7 @@
 package me.bedaring.imsproject.models;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
+@DynamicUpdate(value = true)
 @Table(name = "user")
 public class User {
 
