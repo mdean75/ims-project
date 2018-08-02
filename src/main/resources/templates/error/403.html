@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div class="container" id="top">
+    <div class="row justify-content-center">
+        <h1>It looks like you don't have permission to view this page</h1>
+        <img class="" alt="arrows" th:src="@{images/stop.png}" width="320" height="480"  />
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-4 offset-md-5">
+            <a th:href="@{/ticket}" class="btn btn-lg btn-outline-dark col-md-6">Home</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -133,5 +133,10 @@ public class ImsController {
         return "redirect:/ticket/main";
     }
 
+    @RequestMapping("/403")
+    public String accessDenied() {
+        return "error/403";
+    }
+
 
 }
