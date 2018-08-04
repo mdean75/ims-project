@@ -9,10 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -418,6 +415,67 @@ public class AdminController {
         }
         carrierDao.deleteById(carrier.getId());
         message.addFlashAttribute("message", "Carrier Successfully Deleted!");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "user/list")
+    public String listAllUsers(@ModelAttribute User user, Model model) {
+        model.addAttribute("title", "IMS - List Users");
+        model.addAttribute("subtitle", "User List");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("users", userDao.findAll());
+
+        return "admin/user/list";
+    }
+
+    @RequestMapping(value = "user/update/{id}", method = RequestMethod.GET)
+    public String displayUpdateUser(@ModelAttribute User user, Model model, @PathVariable int id) {
+        model.addAttribute("user", userDao.findById(id));
+        model.addAttribute("title", "IMS - Update User");
+        model.addAttribute("subtitle", "Update User");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("groups", groupDao.findAll());
+        model.addAttribute("carriers", carrierDao.findAll());
+        model.addAttribute("roles", roleDao.findAll());
+
+        return "admin/user/update";
+    }
+
+    @RequestMapping(value = "user/update/{id}", method = RequestMethod.POST)
+    public String processUpdateUser(@ModelAttribute User user, Model model, @PathVariable int id,
+                                    Errors errors, RedirectAttributes message) {
+        if (errors.hasErrors()) {
+            model.addAttribute("user", userDao.findById(id));
+            model.addAttribute("title", "IMS - Update User");
+            model.addAttribute("subtitle", "Update User");
+            model.addAttribute("date", format.format(new Date()));
+            model.addAttribute("groups", groupDao.findAll());
+            model.addAttribute("carriers", carrierDao.findAll());
+            model.addAttribute("roles", roleDao.findAll());
+
+            return "redirect:/admin/user/update/{id}";
+        }
+        User updateUser = userDao.findUserById(id);
+        user.setPassword(updateUser.getPassword());
+        userDao.save(user);
+        message.addFlashAttribute("message", "User successfully updated");
+        return "redirect:/admin/menu";
+    }
+
+    @RequestMapping(value = "user/delete", method = RequestMethod.GET)
+    public String displayUserDelete(@ModelAttribute User user, Model model) {
+        model.addAttribute("title", "IMS - Delete Users");
+        model.addAttribute("subtitle", "User Delete List");
+        model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("users", userDao.findAll());
+
+        return "admin/user/delete";
+    }
+
+    @RequestMapping(value = "user/delete", method = RequestMethod.POST)
+    public String processUserDelete(@ModelAttribute User user, Model model, @RequestParam int id, RedirectAttributes message) {
+        userDao.deleteById(id);
+        message.addFlashAttribute("message", "User successfully deleted");
         return "redirect:/admin/menu";
     }
 }

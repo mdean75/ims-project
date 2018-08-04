@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -191,5 +192,30 @@ public class User {
 
 
         return password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId() == user.getId() &&
+                getActive() == user.getActive() &&
+                Objects.equals(getUsername(), user.getUsername()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                Objects.equals(getFirstName(), user.getFirstName()) &&
+                Objects.equals(getLastName(), user.getLastName()) &&
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getPhone(), user.getPhone()) &&
+                Objects.equals(getNewPassword(), user.getNewPassword()) &&
+                Objects.equals(getVerifyPassword(), user.getVerifyPassword()) &&
+                Objects.equals(getGroupId(), user.getGroupId()) &&
+                Objects.equals(getCarrierId(), user.getCarrierId()) &&
+                Objects.equals(getRoles(), user.getRoles());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getPassword(), getFirstName(), getLastName(), getEmail(), getPhone(), getNewPassword(), getVerifyPassword(), getGroupId(), getCarrierId(), getActive(), getRoles());
     }
 }

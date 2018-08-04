@@ -18,6 +18,8 @@ public interface UserDao extends JpaRepository<User, Integer> {
 
     Optional<User> findByUsername(String username);
 
+    User findUserById(int id);
+
     @Modifying
     @Query(value = "update user set password = ?1 where id = ?2", nativeQuery = true)
     int updatePasswordById(String password, int id);
