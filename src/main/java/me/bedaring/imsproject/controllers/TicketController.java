@@ -73,14 +73,24 @@ public class TicketController {
         return "redirect:/ticket/view/"+id;
     }
 
-    @RequestMapping(value = "list")
-    public String list(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+    @RequestMapping(value = {"list/{id}", "list"})
+    public String list(@PathVariable(required = false) Optional<Integer> id, @AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         model.addAttribute("username", customUserDetails.getUsername());
         model.addAttribute("roles", customUserDetails.getRoles());
-        model.addAttribute("tickets", imsDao.findAll());
+
         model.addAttribute("title", "IMS - List Tickets");
         model.addAttribute("severities", severityDao.findAll());
         model.addAttribute("date", format.format(new Date()));
+
+        if (id.isPresent()) {
+            if (id.get() == 1) {
+                model.addAttribute("tickets", imsDao.findAllByAssignedPersonEquals(customUserDetails.getUsername()));
+            }else if (id.get() == 2) {
+                model.addAttribute("tickets", imsDao.findAll());
+            }
+        }else {
+            model.addAttribute("tickets", imsDao.findAllByAssignedGroupEquals(customUserDetails.getGroupId()));
+        }
         return "ticket/list";
     }
 

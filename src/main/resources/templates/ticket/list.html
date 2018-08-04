@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments :: head">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -32,9 +32,9 @@
                     <div class="row justify-content-center">
                         <div class="col-md-7">
                             <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
-                            <button class="btn btn-outline-primary col-xs-12 col-md-3">My tickets</button>
-                            <button class="btn btn-outline-primary col-xs-12 col-md-5">My team's tickets</button>
-                            <button class="btn btn-outline-primary col-xs-12 col-md-3">All tickets</button>
+                            <a th:href="@{/ticket/list/1}"><button class="btn btn-outline-primary col-xs-12 col-md-3">My tickets</button></a>
+                            <a th:href="@{/ticket/list}"><button class="btn btn-outline-primary col-xs-12 col-md-5">My team's tickets</button></a>
+                            <a sec:authorize="hasAnyRole('SUPPORT', 'ADMIN')" th:href="@{/ticket/list/2}"><button class="btn btn-outline-primary col-xs-12 col-md-3">All tickets</button></a>
                         </div>
                     </div></br>
 
@@ -43,8 +43,8 @@
                         <tr>
                             <th>ID #</th>
                             <th>Title</th>
-                            <th>Category</th>
-                            <th>Assigned to</th>
+                            <th>Status</th>
+                            <th>Requestor</th>
                             <th>Severity</th>
                             <th>Location</th>
 
@@ -52,10 +52,10 @@
                         </thead>
                         <tbody>
                         <tr th:each="ticket : ${tickets}">
-                            <td><a th:href="@{/ticket/view/{id}(id=${ticket.id})}"><span th:text="${ticket.id}"></span> </a></td>
-                            <td th:text="${ticket.title}"></td>
-                            <td th:text="${ticket.categoryMain.categoryName}">Building</td>
-                            <td th:text="${ticket.assignedGroup.groupName}">Joe Smith</td>
+                            <td style="width: 10%;"><a th:href="@{/ticket/view/{id}(id=${ticket.id})}"><span th:text="${ticket.id}"></span> </a></td>
+                            <td style="width: 40%;" th:text="${ticket.title}"></td>
+                            <td th:text="${ticket.status.statusName}">Building</td>
+                            <td style="width: 20%;" th:text="${ticket.requestorName}"></td>
 
                             <td th:text="${ticket.severity.severityName}"
                                 th:classappend="(${ticket.severity.id} == 3 ? 'bg-danger text-light' : '')
@@ -69,7 +69,7 @@
                     </br>
                     <span>
 
-                    <a href="main"><button class="btn btn-primary btn-lg">Home</button></a>
+                    <a th:href="@{/ticket/main}"><button class="btn btn-primary btn-lg">Home</button></a>
                     </span>
 
             </div>
