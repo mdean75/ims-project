@@ -77,8 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/js/**").permitAll()
                     .antMatchers("/images/**").permitAll()
                     .antMatchers("/ticket").permitAll()
-                    //.antMatchers("/admin/**").permitAll()
-                //.antMatchers("/ticket/main").permitAll()
+                    .antMatchers("/profile").authenticated()
                 .antMatchers("/403").permitAll()
                 .antMatchers("/404").permitAll()
                 .antMatchers("/error/**").permitAll()
@@ -99,7 +98,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                    .logoutSuccessUrl("/ticket");
+                    .logoutSuccessUrl("/");
     }
 
 

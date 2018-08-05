@@ -173,7 +173,7 @@
 
                             <div class="form-row">
                                 <div class="form-group" style="margin: auto;">
-                                    <input type="submit" class="btn btn-danger" value="Update Ticket" />
+                                    <input th:if="${assignedTo == user}" type="submit" class="btn btn-danger" value="Update Ticket" />
                                     <a href="../list" class="btn btn-info">Cancel </a>
                                 </div>
                             </div>

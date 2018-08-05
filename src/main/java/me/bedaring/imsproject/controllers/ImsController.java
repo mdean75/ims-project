@@ -7,6 +7,7 @@ import me.bedaring.imsproject.models.User;
 import me.bedaring.imsproject.models.data.CarrierDao;
 import me.bedaring.imsproject.models.data.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,14 @@ public class ImsController {
     private CarrierDao carrierDao;
 
     SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
+
+    @PreAuthorize("permitAll()")
+    @RequestMapping(value="")
+    public String index(Model model) {
+        model.addAttribute("title", "IMS - Home");
+        model.addAttribute("date", format.format(new Date()));
+        return "ticket/index";
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
@@ -67,7 +76,7 @@ public class ImsController {
         //model.addAttribute("user", new User());
         model.addAttribute("user", userDao.findById(customUserDetails.getId()));
         model.addAttribute("carriers", carrierDao.findAll());
-        return "/profile";
+        return "profile";
     }
 
     @RequestMapping(value = "/password-change", method = RequestMethod.POST)

@@ -41,13 +41,7 @@ public class TicketController {
     SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
 
-    @PreAuthorize("permitAll()")
-    @RequestMapping(value="")
-    public String index(Model model) {
-        model.addAttribute("title", "IMS - Home");
-        model.addAttribute("date", format.format(new Date()));
-        return "ticket/index";
-    }
+
 
     @RequestMapping(value = "main", method = RequestMethod.GET)
     public String main(Model model) {
@@ -95,11 +89,12 @@ public class TicketController {
     }
 
     @RequestMapping(value = "view/{id}", method = RequestMethod.GET)
-    public String viewTicket(Model model, @PathVariable String id) {
+    public String viewTicket(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model, @PathVariable String id) {
 
         model.addAttribute("title", "IMS - View Ticket");
         //model.addAttribute("ticket", new Ticket());
        // model.addAttribute("id", id);
+        Optional<Ticket> ticket = imsDao.findById(Integer.valueOf(id));
         model.addAttribute("incident", imsDao.findById(Integer.valueOf(id)));
         model.addAttribute("groups", groupDao.findAll());
         model.addAttribute("severities", severityDao.findAll());
@@ -108,6 +103,9 @@ public class TicketController {
         model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
         model.addAttribute("statuses", statusDao.findAll());
         model.addAttribute("date", format.format(new Date()));
+        // TODO: 8/4/18 change to compare groups instead of individual user
+        model.addAttribute("user", customUserDetails.getUsername());
+        model.addAttribute("assignedTo", ticket.get().getAssignedPerson());
         return "ticket/view";
     }
 
