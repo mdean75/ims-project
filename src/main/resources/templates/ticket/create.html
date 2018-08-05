@@ -105,11 +105,12 @@
                                 </div>
                                 <div class="form-group col">
                                     <select class="custom-select" th:field="*{assignedPerson}">
-                                        <option value="">Select team member</option>
-                                        <option value="Joe">Joe Smith</option>
-                                        <option value="John">John Stewart</option>
-                                        <option value="George">George Constanza</option>
-                                        <option value="Jerry">Jerry Seinfeld</option>
+                                        <option value="0">Select team member</option>
+                                        <option th:each="user : ${users}"
+                                                th:value="${user.id}"
+                                                th:text="${user.lastName + ', ' + user.firstName}">
+                                        </option>
+
                                     </select>
                                     <small style="color: red;" th:errors="*{assignedPerson}"></small>
                                 </div>

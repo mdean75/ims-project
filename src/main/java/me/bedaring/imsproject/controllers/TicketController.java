@@ -9,7 +9,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -37,6 +37,9 @@ public class TicketController {
 
     @Autowired
     private StatusDao statusDao;
+
+    @Autowired
+    private UserDao userDao;
 
     SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
@@ -75,15 +78,17 @@ public class TicketController {
         model.addAttribute("title", "IMS - List Tickets");
         model.addAttribute("severities", severityDao.findAll());
         model.addAttribute("date", format.format(new Date()));
-
+       // AssignedGroup group = groupDao.findById(customUserDetails.getGroupId());
+        Integer test = customUserDetails.getGroupId().getId();
         if (id.isPresent()) {
             if (id.get() == 1) {
-                model.addAttribute("tickets", imsDao.findAllByAssignedPersonEquals(customUserDetails.getUsername()));
+                model.addAttribute("tickets", imsDao.findAllByAssignedPersonId(customUserDetails.getId()));
+
             }else if (id.get() == 2) {
                 model.addAttribute("tickets", imsDao.findAll());
             }
         }else {
-            model.addAttribute("tickets", imsDao.findAllByAssignedGroupEquals(customUserDetails.getGroupId()));
+            model.addAttribute("tickets", imsDao.findAllByAssignedGroupId(test));
         }
         return "ticket/list";
     }
@@ -103,6 +108,7 @@ public class TicketController {
         model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
         model.addAttribute("statuses", statusDao.findAll());
         model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("persons", userDao.findAll());
         // TODO: 8/4/18 change to compare groups instead of individual user
         model.addAttribute("user", customUserDetails.getUsername());
         model.addAttribute("assignedTo", ticket.get().getAssignedPerson());
@@ -158,6 +164,7 @@ public class TicketController {
         model.addAttribute("maincategory", categoryDao.findCategoryByCategoryTypeEquals("Main"));
         model.addAttribute("detailcategory", categoryDao.findCategoryByCategoryTypeEquals("Detail"));
         model.addAttribute("date", format.format(new Date()));
+        model.addAttribute("users", userDao.findAll());
         return "ticket/create";
     }
 
@@ -166,7 +173,8 @@ public class TicketController {
     public String processCreateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors,
                                       @RequestParam int assignedGroup, @RequestParam int severity,
                                       @RequestParam int categoryMain, @RequestParam int categorySub,
-                                      @RequestParam int categoryDetail, @RequestParam int statusId, Model model) {
+                                      @RequestParam int categoryDetail, @RequestParam int statusId,
+                                      @RequestParam int assignedPerson, Model model) {
 
         if(errors.hasErrors()) {
             model.addAttribute("title", "IMS - Create Ticket");
@@ -186,12 +194,14 @@ public class TicketController {
         Optional<Category> subCategory = categoryDao.findById(categorySub);
         Optional<Category> detailCategory = categoryDao.findById(categoryDetail);
         Optional<Status> status = statusDao.findById(statusId);
+        Optional<User> user = userDao.findById(assignedPerson);
         newTicket.setAssignedGroup(group);
         newTicket.setSeverity(displaySeverity);
         newTicket.setCategoryMain(mainCategory);
         newTicket.setCategorySub(subCategory);
         newTicket.setCategoryDetail(detailCategory);
         newTicket.setStatus(status);
+        newTicket.setAssignedPerson(user);
 
         imsDao.save(newTicket);
         return "redirect:/ticket/main";

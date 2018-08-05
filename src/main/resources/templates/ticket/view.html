@@ -118,8 +118,15 @@
                                     </select>
                                 </div>
                                 <div class="form-group col">
-                                    <input type="text" class="form-control" th:field="*{assignedPerson}"
-                                           placeholder="Assigned to person" />
+
+                                    <select class="custom-select" th:field="*{assignedPerson}">
+                                        <option th:each="person : ${persons}"
+                                                th:value="${person.id}"
+                                                th:text="${person.firstName + ' ' + person.lastName}"
+                                                th:selected="(${{incident.assignedPerson.id}} == ${person.id})">
+                                        </option>
+
+                                    </select>
                                 </div>
                                 <div class="col">
                                     <input type="text" class="form-control" placeholder="Time in Status" />
@@ -173,7 +180,7 @@
 
                             <div class="form-row">
                                 <div class="form-group" style="margin: auto;">
-                                    <input th:if="${assignedTo == user}" type="submit" class="btn btn-danger" value="Update Ticket" />
+                                    <input type="submit" class="btn btn-danger" value="Update Ticket" />
                                     <a href="../list" class="btn btn-info">Cancel </a>
                                 </div>
                             </div>

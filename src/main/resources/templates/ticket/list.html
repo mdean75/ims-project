@@ -54,7 +54,7 @@
                         <tr th:each="ticket : ${tickets}">
                             <td style="width: 10%;"><a th:href="@{/ticket/view/{id}(id=${ticket.id})}"><span th:text="${ticket.id}"></span> </a></td>
                             <td style="width: 40%;" th:text="${ticket.title}"></td>
-                            <td th:text="${ticket.status.statusName}">Building</td>
+                            <td th:text="${ticket.status.statusName}"></td>
                             <td style="width: 20%;" th:text="${ticket.requestorName}"></td>
 
                             <td th:text="${ticket.severity.severityName}"

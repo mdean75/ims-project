@@ -9,4 +9,5 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface GroupDao extends CrudRepository<AssignedGroup, Integer> {
+    AssignedGroup findById(AssignedGroup groupId);
 }
