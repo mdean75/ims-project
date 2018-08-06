@@ -108,6 +108,7 @@
                             <p>Assignment</p>
                             <div class="form-row">
                                 <div class="form-group col">
+                                    <small>Group</small>
                                     <select class="custom-select" th:field="*{assignedGroup}">
                                         <option th:each="group : ${groups}"
                                                 th:value="${group.id}"
@@ -118,7 +119,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group col">
-
+                                    <small>Individual</small>
                                     <select class="custom-select" th:field="*{assignedPerson}">
                                         <option th:each="person : ${persons}"
                                                 th:value="${person.id}"
@@ -128,10 +129,13 @@
 
                                     </select>
                                 </div>
+                                <!-- taking this out for now, will revisit implementing this at a later date
                                 <div class="col">
                                     <input type="text" class="form-control" placeholder="Time in Status" />
                                 </div>
+                                -->
                                 <div class="col">
+                                    <small>Last Updated</small>
                                     <input type="text" class="form-control" readonly="readonly"
                                            th:field="*{updateTimestamp}" />
                                 </div>
