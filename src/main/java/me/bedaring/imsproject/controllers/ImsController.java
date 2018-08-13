@@ -36,7 +36,7 @@ public class ImsController {
     @Autowired
     private CarrierDao carrierDao;
 
-    SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
+    private SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
     @PreAuthorize("permitAll()")
     @RequestMapping(value="")

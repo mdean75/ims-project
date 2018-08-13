@@ -34,7 +34,7 @@
                             <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
                             <a th:href="@{/ticket/list/1}"><button class="btn btn-outline-primary col-xs-12 col-md-3">My tickets</button></a>
                             <a th:href="@{/ticket/list}"><button class="btn btn-outline-primary col-xs-12 col-md-5">My team's tickets</button></a>
-                            <a sec:authorize="hasAnyRole('SUPPORT', 'ADMIN')" th:href="@{/ticket/list/2}"><button class="btn btn-outline-primary col-xs-12 col-md-3">All tickets</button></a>
+                            <a sec:authorize="hasAnyRole('SUPPORT')" th:href="@{/ticket/list/2}"><button class="btn btn-outline-primary col-xs-12 col-md-3">All tickets</button></a>
                         </div>
                     </div></br>
 

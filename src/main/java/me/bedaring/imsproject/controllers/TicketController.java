@@ -41,7 +41,10 @@ public class TicketController {
     @Autowired
     private UserDao userDao;
 
-    SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
+    @Autowired
+    private RoleDao roleDao;
+
+    private SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
 
 
@@ -72,6 +75,7 @@ public class TicketController {
 
     @RequestMapping(value = {"list/{id}", "list"})
     public String list(@PathVariable(required = false) Optional<Integer> id, @AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+
         model.addAttribute("username", customUserDetails.getUsername());
         model.addAttribute("roles", customUserDetails.getRoles());
 
@@ -79,8 +83,9 @@ public class TicketController {
         model.addAttribute("severities", severityDao.findAll());
         model.addAttribute("date", format.format(new Date()));
        // AssignedGroup group = groupDao.findById(customUserDetails.getGroupId());
-        Integer test = customUserDetails.getGroupId().getId();
+        Integer group = customUserDetails.getGroupId().getId();
         if (id.isPresent()) {
+
             if (id.get() == 1) {
                 model.addAttribute("tickets", imsDao.findAllByAssignedPersonId(customUserDetails.getId()));
 
@@ -88,7 +93,7 @@ public class TicketController {
                 model.addAttribute("tickets", imsDao.findAll());
             }
         }else {
-            model.addAttribute("tickets", imsDao.findAllByAssignedGroupId(test));
+            model.addAttribute("tickets", imsDao.findAllByAssignedGroupId(group));
         }
         return "ticket/list";
     }

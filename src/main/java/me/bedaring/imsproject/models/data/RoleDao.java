@@ -10,4 +10,6 @@ import javax.transaction.Transactional;
 @Transactional
 public interface RoleDao extends CrudRepository<Role, Integer> {
     Role findByRole(String role);
+
+    Role findRoleByRoleId(int roleId);
 }
