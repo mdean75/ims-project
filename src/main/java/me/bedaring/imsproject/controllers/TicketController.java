@@ -157,7 +157,6 @@ public class TicketController {
         return "redirect:/ticket/main";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPORT')")
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String displayCreateTicket(Model model) {
         model.addAttribute("title", "IMS - Create Ticket");
@@ -173,7 +172,6 @@ public class TicketController {
         return "ticket/create";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public String processCreateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors,
                                       @RequestParam int assignedGroup, @RequestParam int severity,
