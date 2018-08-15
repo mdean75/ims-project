@@ -53,4 +53,16 @@ public class Role {
     public void setUsers(Set<User> users) {
         this.users = users;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Role)) return false;
+        Role role1 = (Role) o;
+        return getRoleId() == role1.getRoleId() &&
+                Objects.equals(getRole(), role1.getRole()) &&
+                Objects.equals(getUsers(), role1.getUsers());
+    }
+
+
 }

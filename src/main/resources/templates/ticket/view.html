@@ -19,6 +19,7 @@
                         <div class="message col-md-6">
 
                             <p class="text-center" th:text="${date}">Tuesday February 12, 2018</p></hr>
+                            <p class="text-center" style="color: red;" th:text="${message}"></p>
                         </div>
                         <form method="post" th:object="${incident}">
 
@@ -172,6 +173,7 @@
                             <div class="form-row">
                                 <div class="form-group col">
                                     <textarea class="form-control" rows="3" th:field="*{update}"></textarea>
+                                    <small style="color: red;" th:errors="*{update}"></small>
                                 </div>
                             </div>
 
@@ -184,7 +186,7 @@
 
                             <div class="form-row">
                                 <div class="form-group" style="margin: auto;">
-                                    <input type="submit" class="btn btn-danger" value="Update Ticket" />
+                                    <input th:if="(${render} == true)" type="submit" class="btn btn-danger" value="Update Ticket" />
                                     <a href="../list" class="btn btn-info">Cancel </a>
                                 </div>
                             </div>

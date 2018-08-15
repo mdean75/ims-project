@@ -55,4 +55,7 @@ public class CustomUserDetails extends User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    // get the group id of the user
+    public AssignedGroup getGroup(){ return  getGroupId(); }
 }
