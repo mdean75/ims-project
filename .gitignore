@@ -23,3 +23,7 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+/resources/application.properties
+/launchcode/ims-project/application.yml
+/home/mdeangelo/launchcode/ims-project/application.yml
