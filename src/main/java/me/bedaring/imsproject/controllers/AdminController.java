@@ -6,18 +6,20 @@ import me.bedaring.imsproject.models.*;
 import me.bedaring.imsproject.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * This class supplies the request mappings for all the admin features
+ */
 @Controller
 @RequestMapping("admin")
 public class AdminController {
@@ -45,6 +47,9 @@ public class AdminController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
@@ -305,6 +310,7 @@ public class AdminController {
     @RequestMapping(value = "user/add", method = RequestMethod.POST)
     public String processAddUser(@Valid @ModelAttribute("user") User user, Errors errors,
                                  RedirectAttributes message, Model model) {
+
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add User");
             model.addAttribute("subtitle", "Add User");
@@ -319,13 +325,15 @@ public class AdminController {
 
 
         String plainPassword = User.createRandomPassword(24);
-        user.setPassword(BCrypt.hashpw(plainPassword, BCrypt.gensalt()));
+        //user.setPassword(BCrypt.hashpw(plainPassword, BCrypt.gensalt()));
+
+        user.setPassword(bCryptPasswordEncoder.encode(plainPassword));
         try {
             userDao.save(user);
             message.addFlashAttribute("message", "Successfully Added New User");
             Mail mail = new Mail();
-            mail.setFrom("user-creation@bedaring.me");
-            mail.setTo("deangelomp@gmail.com");
+            mail.setFrom("bedaring.me@gmail.com");
+            mail.setTo(user.getEmail());
             mail.setSubject("New account setup");
             mail.setContent("A new user account has been created for you.  Please use the following credentials " +
                     "for initial login.\n\n\t" + user.getUsername() + "\n\t" + plainPassword);

@@ -55,10 +55,11 @@
                                 <div class="form-group col" >
                                     <label>Group</label>
                                     <select class="form-control" name="groupId">
-                                        <option>Select Group</option>
+
                                         <option th:each="group : ${groups}"
                                                 th:value="${group.id}"
-                                                th:text="${group.groupName}"></option>
+                                                th:text="${group.groupName}"
+                                                th:selected="${group.id} == 0"></option>
                                     </select>
                                     <small style="color: red;" th:errors="*{groupId}"></small>
 
@@ -75,10 +76,11 @@
                                 <div class="form-group col">
                                     <label>Carrier</label>
                                     <select class="form-control" name="carrierId">
-                                        <option>Select Carrier</option>
+
                                         <option th:each="carrier : ${carriers}"
                                                 th:value="${carrier.id}"
-                                                th:text="${carrier.carrierName}"></option>
+                                                th:text="${carrier.carrierName}"
+                                                th:selected="(${carrier.id} == 0)"></option>
 
                                     </select>
 

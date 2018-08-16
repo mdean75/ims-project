@@ -3,8 +3,8 @@ package me.bedaring.imsproject.models;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -20,16 +20,28 @@ public class User {
     @Column(name = "id")
     private int id;
 
+    @NotNull
     @Column(nullable = false, unique = true)
+    @Size(min = 1, message = "username is required")
     private String username;
 
     @Size(min=1, message = "Field cannot be empty")
     private String password;
 
+    @NotNull
+    @Column(nullable = false, unique = true)
+    @Size(min = 1, message = "First name is required")
     private String firstName;
 
+    @NotNull
+    @Column(nullable = false, unique = true)
+    @Size(min = 1, message = "Last name is required")
     private String lastName;
 
+    @NotNull
+    @Column(nullable = false, unique = true)
+    @Size(min = 1, message = "Valid email is required")
+    @Email(message = "Valid email is required")
     private String email;
 
     private String phone;
