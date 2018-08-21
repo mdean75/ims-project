@@ -26,4 +26,6 @@ public interface ImsDao extends CrudRepository<Ticket, Integer> {
     List<Ticket> findAllByAssignedPersonId(int id);
 
     List<Ticket> findAllByAssignedGroupId(int id);
+
+    int countTicketByAssignedPerson(User user);
 }

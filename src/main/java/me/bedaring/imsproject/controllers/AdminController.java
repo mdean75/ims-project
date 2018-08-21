@@ -684,9 +684,15 @@ public class AdminController {
      */
     @RequestMapping(value = "user/delete", method = RequestMethod.POST)
     public String processUserDelete(@RequestParam int id, RedirectAttributes message) {
-        // TODO: 8/20/18 get count of user assigned to tickets and do not allow if any records are assigned to this user
-        userDao.deleteById(id);
-        message.addFlashAttribute("message", "User successfully deleted");
+        // first check if user is assigned to tickets and disallow delete if any records exist and redirect with error message
+        if (imsDao.countTicketByAssignedPerson(userDao.findById(id).get()) > 0) {
+            message.addFlashAttribute("message", "User is assigned to tickets and cannot be deleted");
+        }else {
+            // user is ok to delete since not assigned to any tickets, delete then redirect with success message
+            userDao.deleteById(id);
+            message.addFlashAttribute("message", "User successfully deleted");
+        }
+
         return "redirect:/admin/menu";
     }
 }
