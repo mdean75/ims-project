@@ -151,7 +151,6 @@ public class AdminController {
      */
     @RequestMapping(value = "category/add", method = RequestMethod.GET)
     public String displayAddCategory(Model model) {
-        // TODO: 8/21/18 change category type to a select box
         model.addAttribute("title", "IMS - Add Category");
         model.addAttribute("subtitle", "Add Category");
         model.addAttribute("date", format.format(new Date()));
@@ -685,7 +684,7 @@ public class AdminController {
     @RequestMapping(value = "user/delete", method = RequestMethod.POST)
     public String processUserDelete(@RequestParam int id, RedirectAttributes message) {
         // first check if user is assigned to tickets and disallow delete if any records exist and redirect with error message
-        if (imsDao.countTicketByAssignedPerson(userDao.findById(id).get()) > 0) {
+        if (imsDao.countTicketByAssignedPerson(userDao.findUserById(id)) > 0) {
             message.addFlashAttribute("message", "User is assigned to tickets and cannot be deleted");
         }else {
             // user is ok to delete since not assigned to any tickets, delete then redirect with success message

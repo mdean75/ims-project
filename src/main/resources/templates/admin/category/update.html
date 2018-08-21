@@ -43,7 +43,12 @@
                                 <div class="form-row">
                                     <input class="col-md-1 form-control" type="text" readonly="readonly" id="id" name="id" th:value="${aCategory.id}"/>
                                     <input class="col-md-3 offset-md-1 form-control" type="text" name="categoryName" id="categoryName" th:value="${aCategory.categoryName}"/>
-                                    <input class="col-md-3 offset-md-1 form-control" type="text" name="categoryType" id="categoryType" th:value="${aCategory.categoryType}" />
+
+                                    <select class="col-md-3 offset-md-1 form-control" name="categoryType" id="categoryType" th:value="${aCategory.categoryType}">
+                                        <option th:value="Main" th:text="Main" th:selected="${aCategory.categoryType == 'Main'}"></option>
+                                        <option th:value="Sub" th:text="Sub" th:selected="${aCategory.categoryType == 'Sub'}"></option>
+                                        <option th:value="Detail" th:text="Detail" th:selected="${aCategory.categoryType == 'Detail'}"></option>
+                                    </select>
                                     <input class="col-md-2 offset-md-1 form-control btn btn-outline-danger" type="submit" value="Update" />
                                 </div>
                             </form>

@@ -41,7 +41,13 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col">
-                                    <input class="form-control" th:field="*{categoryType}" />
+
+                                    <select class="form-control" th:field="*{categoryType}" >
+                                        <option value="">Select Category Type</option>
+                                        <option value="Main">Main</option>
+                                        <option value="Sub">Sub</option>
+                                        <option value="Detail">Detail</option>
+                                    </select>
                                     <small style="color: red;" th:errors="*{categoryType}"></small>
                                 </div>
                             </div>
