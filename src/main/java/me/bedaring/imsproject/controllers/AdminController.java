@@ -355,11 +355,10 @@ public class AdminController {
      * This method supplies the POST request mapping to process deleting a category
      * @param category Category object used to get details of category being deleted
      * @param message RedirectAttributes used to add a flash message for successful deleting category
-     * @param model used to supply attributes to the view
      * @return template view
      */
     @RequestMapping(value = "category/delete", method = RequestMethod.POST)
-    public String processDeleteCategory(@ModelAttribute Category category, RedirectAttributes message, Model model) {
+    public String processDeleteCategory(@ModelAttribute Category category, RedirectAttributes message) {
 
         // check if any parent records exist for the category to be deleted, if any are present disallow delete and display message
         int count = imsDao.countTicketByCategory(category);
@@ -393,11 +392,10 @@ public class AdminController {
      * This method supplies the POST request mapping to process deleting a severity
      * @param severity Severity object used to get details of severity being deleted
      * @param message RedirectAttributes used to add a flash message for successful deleting severity
-     * @param model used to supply attributes to the view
      * @return template view
      */
     @RequestMapping(value = "severity/delete", method = RequestMethod.POST)
-    public String processDeleteSeverity(@ModelAttribute Severity severity, RedirectAttributes message, Model model) {
+    public String processDeleteSeverity(@ModelAttribute Severity severity, RedirectAttributes message) {
         // check if any parent records exist for the severity to be deleted, if any are present disallow delete and display message
         int count = imsDao.countTicketBySeverity(severity);
         if (count > 0) {
@@ -538,12 +536,11 @@ public class AdminController {
      * @param carrier Carrier object to get details about each carrier in the system
      * @param errors Errors on validating user input
      * @param message RedirectAttributes used to add a flash message for successful updating carrier
-     * @param model used to supply attributes to the view
      * @return template view
      */
     @RequestMapping(value = "carrier/update", method = RequestMethod.POST)
     public String processUpdateCarrier(@Valid @ModelAttribute Carrier carrier,
-                                     Errors errors, RedirectAttributes message, Model model) {
+                                     Errors errors, RedirectAttributes message) {
         // if errors are present add the required attributes
         if (errors.hasErrors()) {
             message.addFlashAttribute("message", "Carrier Name and domain cannot be empty");
@@ -575,12 +572,11 @@ public class AdminController {
      * This method supplies the POST request mapping to process deleting a carrier
      * @param carrier Carrier object to get details about each carrier in the system
      * @param message RedirectAttributes used to add a flash message for successful deleting carrier
-     * @param model used to supply attributes to the view
      * @return template view
      */
     @RequestMapping(value = "carrier/delete", method = RequestMethod.POST)
     public String processDeleteCarriers(@ModelAttribute Carrier carrier,
-                                     RedirectAttributes message, Model model) {
+                                     RedirectAttributes message) {
         // check if any parent records exist for the group to be deleted, if any are present disallow delete and display message
         int count = userDao.countUserByCarrierId(carrier);
         if (count > 0) {
