@@ -130,12 +130,12 @@
                                     <small style="color: red;" th:errors="*{severity}"></small>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <select class="custom-select" name="statusId">
-                                        <option value="">Select Status</option>
-                                        <option th:each="status : ${statuses}"
-                                                th:value="${status.id}"
-                                                th:text="${status.statusName}"
-                                                th:selected="(${{status.id}} == 0)">
+                                    <select class="custom-select" th:field="*{status}">
+
+                                        <option th:each="ticketStatus : ${statuses}"
+                                                th:value="${ticketStatus.id}"
+                                                th:text="${ticketStatus.statusName}"
+                                                th:selected="(${{ticketStatus.id}} == 0)">
 
 
                                         </option>

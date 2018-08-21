@@ -113,7 +113,7 @@ public class TicketController {
         model.addAttribute("severities", severityDao.findAll());
         model.addAttribute("date", format.format(new Date()));
 
-        // get the user's group id
+        // get the logged in user's group id to select records belonging to that group
         int group = customUserDetails.getGroupId().getId();
 
         // check if the optional id is present and if true process based on the value
@@ -171,7 +171,7 @@ public class TicketController {
     /**
      * This method supplies the mapping to process the POST request for updating an incident
      * @param newTicket Ticket object to get details of the ticket being updated
-     * @param errors Errors of current ticket being updaated
+     * @param errors Errors of current ticket being updated
      * @param assignedGroup id of AssignedGroup of the ticket
      * @param severity id of Severity of the ticket
      * @param categoryMain id of main category of the ticket
@@ -260,23 +260,13 @@ public class TicketController {
 
     /**
      * This method supplies the mapping for processing the create ticket form.
-     * @param newTicket Ticket object to get details of the ticket being updated
-     * @param errors Errors of current ticket being updaated
-     * @param assignedGroup id of AssignedGroup of the ticket
-     * @param severity id of Severity of the ticket
-     * @param categoryMain id of main category of the ticket
-     * @param categorySub id of sub category of the ticket
-     * @param categoryDetail id of the detail category of the ticket
-     * @param statusId id of status of the ticket
+     * @param newTicket Ticket object to get details of the ticket being created
+     * @param errors Errors of current ticket being updated
      * @param model used to supply attributes to the view
      * @return view template
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public String processCreateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors,
-                                      @RequestParam int assignedGroup, @RequestParam int severity,
-                                      @RequestParam int categoryMain, @RequestParam int categorySub,
-                                      @RequestParam int categoryDetail, @RequestParam int statusId,
-                                      @RequestParam int assignedPerson, Model model) {
+    public String processCreateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors, Model model) {
 
         if(errors.hasErrors()) {
             model.addAttribute("title", "IMS - Create Ticket");
@@ -289,23 +279,6 @@ public class TicketController {
             model.addAttribute("date", format.format(new Date()));
             return "ticket/create";
         }
-
-        // get the assignedGroup, severity, categoryMain, categorySub, categoryDetail, status, and assignedPerson
-        // of the new ticket using the parameter values and add to the ticket before saving
-        Optional<AssignedGroup> group = groupDao.findById(assignedGroup);
-        Optional<Severity> displaySeverity = severityDao.findById(severity);
-        Optional<Category> mainCategory = categoryDao.findById(categoryMain);
-        Optional<Category> subCategory = categoryDao.findById(categorySub);
-        Optional<Category> detailCategory = categoryDao.findById(categoryDetail);
-        Optional<Status> status = statusDao.findById(statusId);
-        Optional<User> user = userDao.findById(assignedPerson);
-        newTicket.setAssignedGroup(group);
-        newTicket.setSeverity(displaySeverity);
-        newTicket.setCategoryMain(mainCategory);
-        newTicket.setCategorySub(subCategory);
-        newTicket.setCategoryDetail(detailCategory);
-        newTicket.setStatus(status);
-        newTicket.setAssignedPerson(user);
 
         imsDao.save(newTicket);
         return "redirect:/ticket/main";
