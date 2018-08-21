@@ -198,7 +198,7 @@ public class TicketController {
             model.addAttribute("title", "IMS - update Ticket");
             model.addAttribute("groups", groupDao.findAll());
             model.addAttribute("severities", severityDao.findAll());
-            model.addAttribute("categories", categoryDao.findAll());
+            model.addAttribute("categories", categoryDao.findAllByOrderByCategoryTypeAscCategoryNameAsc());
             model.addAttribute("statuses", statusDao.findAll());
             model.addAttribute("date", format.format(new Date()));
             return "ticket/view";

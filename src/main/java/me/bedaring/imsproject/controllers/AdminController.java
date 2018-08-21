@@ -267,7 +267,7 @@ public class AdminController {
         model.addAttribute("title", "IMS - Update Category");
         model.addAttribute("subtitle", "Update Category");
         model.addAttribute("date", format.format(new Date()));
-        model.addAttribute("categories", categoryDao.findAll());
+        model.addAttribute("categories", categoryDao.findAllByOrderByCategoryTypeAscCategoryNameAsc());
         return "admin/category/update";
     }
 
@@ -346,7 +346,7 @@ public class AdminController {
         model.addAttribute("title", "IMS - Delete Category");
         model.addAttribute("subtitle", "Delete Category");
         model.addAttribute("date", format.format(new Date()));
-        model.addAttribute("categories", categoryDao.findAll());
+        model.addAttribute("categories", categoryDao.findAllByOrderByCategoryTypeAscCategoryNameAsc());
         return "admin/category/delete";
     }
 
