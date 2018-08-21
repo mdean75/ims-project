@@ -37,7 +37,7 @@
                         </div>
 
                         <div th:each="aSeverity : ${severities}">
-                            <form method="post" th:object="${severity}">
+                            <form method="post" onsubmit="return confirm('Are you sure you want to DELETE this severity?')" th:object="${severity}">
                                 <div class="form-row">
                                     <input class="col-md-2 form-control" type="text" readonly="readonly" id="id" name="id" th:value="${aSeverity.id}"/>
                                     <input class="col-md-6 offset-md-1 form-control" type="text" name="severityName" id="severityName" th:value="${aSeverity.severityName}"/>

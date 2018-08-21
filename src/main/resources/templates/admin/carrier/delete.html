@@ -37,7 +37,7 @@
                     </div>
 
                     <div th:each="aCarrier : ${carriers}">
-                        <form method="post" th:object="${carrier}">
+                        <form method="post" onsubmit="return confirm('Are you sure you want to DELETE this carrier?')" th:object="${carrier}">
                             <div class="form-row">
                                 <input class="col-md-2 form-control" type="text" readonly="readonly" id="id" name="id" th:value="${aCarrier.id}"/>
                                 <input class="col-md-6 offset-md-1 form-control" type="text" name="carrierName" id="carrierName" th:value="${aCarrier.carrierName}"/>

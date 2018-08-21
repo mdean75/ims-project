@@ -39,7 +39,7 @@
                         </div>
 
                         <div th:each="aCategory : ${categories}">
-                            <form method="post" th:object="${category}">
+                            <form method="post" onsubmit="return confirm('Are you sure you want to DELETE this category?')" th:object="${category}">
                                 <div class="form-row">
                                     <input class="col-md-1 form-control" type="text" readonly="readonly" id="id" name="id" th:value="${aCategory.id}"/>
                                     <input class="col-md-3 offset-md-1 form-control" type="text" name="categoryName" id="categoryName" th:value="${aCategory.categoryName}"/>

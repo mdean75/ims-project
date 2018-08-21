@@ -42,7 +42,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="user : ${users}">
-                        <form method="post" th:object="${user}">
+                        <form method="post" onsubmit="return confirm('Are you sure you want to DELETE this user?')" th:object="${user}">
                         <td ><input  class="form-control" type="text" name="id" id="id" readonly="readonly" th:value="${user.id}"/></td>
                         <td th:text="${user.username}"></td>
                         <td th:text="${user.firstName}"></td>

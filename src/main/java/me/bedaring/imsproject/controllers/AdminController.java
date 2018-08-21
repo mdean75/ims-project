@@ -5,7 +5,6 @@ import me.bedaring.imsproject.Mail;
 import me.bedaring.imsproject.models.*;
 import me.bedaring.imsproject.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * This class supplies the request mappings for all the admin features
+ * @author Michael DeAngelo
+ * last update date: Aug 18, 2018
+ * purpose: Controller class for the admin features.
  */
 @Controller
 @RequestMapping("admin")
@@ -51,8 +52,14 @@ public class AdminController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
+    // date format to use for display timestamp
+    private SimpleDateFormat format = new SimpleDateFormat("EEEE MMMM d, y - hh:mm:ss aa");
 
+    /**
+     * This method supplies the request mapping to display the admin menu
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value="menu")
     public String index(Model model) {
         model.addAttribute("title", "IMS - Admin Menu");
@@ -60,6 +67,11 @@ public class AdminController {
         return "admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the add group form
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "group/add", method = RequestMethod.GET)
     public String displayAddGroup(Model model) {
         model.addAttribute("title", "IMS - Add Group");
@@ -69,20 +81,36 @@ public class AdminController {
         return "admin/group/add";
     }
 
+    /**
+     * This method supplies the POST request mapping to process adding a group
+     * @param group AssignedGroup object to get details of group being created
+     * @param errors Errors of current group being updated
+     * @param model used to supply attributes to the view
+     * @param message RedirectAttributes used to add a flash message for successful adding a group
+     * @return template view
+     */
     @RequestMapping(value = "group/add", method = RequestMethod.POST)
     public String processAddGroup(@Valid @ModelAttribute("group") AssignedGroup group, Errors errors, Model model,
                                   RedirectAttributes message) {
+        // if errors are present add the required attributes
         if (errors.hasErrors()) {
-            model.addAttribute("title", "IMS - Add Group post");
+            model.addAttribute("title", "IMS - Add Group");
             model.addAttribute("subtitle", "Add Group");
             model.addAttribute("date", format.format(new Date()));
             return "admin/group/add";
         }
+
+        // validation passed, save(add) the new group, then redirect to the admin menu and display a success flash message
         groupDao.save(group);
         message.addFlashAttribute("message", "Successfully added new group");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the add severity form
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "severity/add", method = RequestMethod.GET)
     public String displayAddSeverity(Model model) {
         model.addAttribute("title", "IMS - Add Severity");
@@ -92,20 +120,35 @@ public class AdminController {
         return "admin/severity/add";
     }
 
+    /**
+     * This method supplies the POST request mapping to process adding a severity
+     * @param severity Severity object used to create new severity level
+     * @param errors Errors on validating user input
+     * @param model used to supply attributes to the view
+     * @param message RedirectAttributes used to add a flash message for successful adding severity
+     * @return template view
+     */
     @RequestMapping(value = "severity/add", method = RequestMethod.POST)
     public String processAddSeverity(@Valid @ModelAttribute("severity") Severity severity, Errors errors,  Model model,
                                      RedirectAttributes message) {
+        // if errors are present add the required attributes
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add Severity");
-
+            model.addAttribute("subtitle", "Add Severity");
             model.addAttribute("date", format.format(new Date()));
             return "admin/severity/add";
         }
+        // validation passed, save(add) the new severity, then redirect to the admin menu and display a success flash message
         severityDao.save(severity);
         message.addFlashAttribute("message", "New severity level added successfully");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the add category form
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "category/add", method = RequestMethod.GET)
     public String displayAddCategory(Model model) {
         model.addAttribute("title", "IMS - Add Category");
@@ -115,9 +158,18 @@ public class AdminController {
         return "admin/category/add";
     }
 
+    /**
+     * This method supplies the POST request mapping to process adding a category
+     * @param category Category object used to create new category
+     * @param errors Errors on validating user input
+     * @param model used to supply attributes to the view
+     * @param message RedirectAttributes used to add a flash message for successful adding category
+     * @return template view
+     */
     @RequestMapping(value = "category/add", method = RequestMethod.POST)
     public String processAddCategory(@Valid @ModelAttribute("category") Category category, Errors errors, Model model,
                                      RedirectAttributes message) {
+        // if errors are present add the required attributes
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add Category");
             model.addAttribute("subtitle", "Add Category");
@@ -125,38 +177,56 @@ public class AdminController {
             return "admin/category/add";
 
         }
+        // validation passed, save(add) the new category, then redirect to the admin menu and display a success flash message
         categoryDao.save(category);
         message.addFlashAttribute("message", "New category successfully added");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the group update form
+     * @param assignedGroup AssignedGroup object used to get details about the assigned groups in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "group/update", method = RequestMethod.GET)
     public String listUpdateGroups(@ModelAttribute AssignedGroup assignedGroup, Model model) {
         model.addAttribute("title", "IMS - Update Group");
         model.addAttribute("subtitle", "Update Group");
         model.addAttribute("date", format.format(new Date()));
+        // TODO: 8/20/18 change to sort the list
         model.addAttribute("groups", groupDao.findAll());
         return "admin/group/update";
 
     }
 
+    /**
+     * This method supplies the POST request mapping to process updating a group
+     * @param assignedGroup AssignedGroup object used to get details about the assigned groups in the system
+     * @param errors Errors on validating user input
+     * @param message RedirectAttributes used to add a flash message for successful updating group
+     * @return template view
+     */
     @RequestMapping(value = "group/update", method = RequestMethod.POST)
     public String processUpdateGroup(@Valid @ModelAttribute("assignedGroup") AssignedGroup assignedGroup,
-                                     Errors errors, RedirectAttributes message, Model model) {
+                                     Errors errors, RedirectAttributes message) {
+        // if errors are present redisplay the group update page with a flash message
         if (errors.hasErrors()) {
-            model.addAttribute("title", "IMS - Update Group");
-            model.addAttribute("subtitle", "Update Group");
-            model.addAttribute("date", format.format(new Date()));
-            model.addAttribute("groups", groupDao.findAll());
-            model.addAttribute(message.addFlashAttribute("message", "Field cannot be empty"));
+            message.addFlashAttribute("message", "Group Name cannot be empty");
             return "redirect:/admin/group/update";
         }
-
+        // validation passed, save(update) the group, then redirect to the admin menu and display a success flash message
         groupDao.save(assignedGroup);
         message.addFlashAttribute("message", "Group Successfully Updated!");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the severity update form
+     * @param severity Severity object used to get details about the severity levels in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "severity/update", method = RequestMethod.GET)
     public String listUpdateSeverities(@ModelAttribute Severity severity, Model model) {
         model.addAttribute("title", "IMS - Update Severity");
@@ -166,52 +236,71 @@ public class AdminController {
         return "admin/severity/update";
     }
 
+    /**
+     * This method supplies the POST request mapping to process updating a severity
+     * @param severity Severity object used to get details about the severity levels in the system
+     * @param errors Errors on validating user input
+     * @param message RedirectAttributes used to add a flash message for successful updating severity
+     * @return template view
+     */
     @RequestMapping(value = "severity/update", method = RequestMethod.POST)
-    public String processUpdateSeverity(@Valid @ModelAttribute("severity") Severity severity,
-                                        @RequestParam String severityName, @RequestParam int id, Errors errors,
-                                        RedirectAttributes message, Model model) {
+    public String processUpdateSeverity(@Valid @ModelAttribute("severity") Severity severity, Errors errors,
+                                        RedirectAttributes message) {
+        // if errors are present redisplay the update severity page with a flash message
         if (errors.hasErrors()) {
-            model.addAttribute("title", "IMS - Update Severity");
-            model.addAttribute("subtitle", "Update Severity");
-            model.addAttribute("date", format.format(new Date()));
-            model.addAttribute("severities", severityDao.findAll());
-            model.addAttribute(message.addFlashAttribute("message", "Field cannot be empty"));
+            message.addFlashAttribute("message", "Severity Name cannot be empty");
             return "redirect:/admin/severity/update";
         }
-
-        severityDao.update(severityName, id);
-
+        // validation passed, save(update) the severity, then redirect to the admin menu and display a success flash message
+        severityDao.save(severity);
         message.addFlashAttribute("message", "Severity Successfully Updated!");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the category update form
+     * @param category Category object used to get details about the categories in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "category/update", method = RequestMethod.GET)
     public String listUpdateCategories(@ModelAttribute Category category, Model model) {
         model.addAttribute("title", "IMS - Update Category");
         model.addAttribute("subtitle", "Update Category");
         model.addAttribute("date", format.format(new Date()));
-
         model.addAttribute("categories", categoryDao.findAll());
         return "admin/category/update";
     }
 
+    /**
+     * This method supplies the POST request mapping to process updating a category
+     * @param category Category object used to update the given category
+     * @param errors Errors on validating user input
+     * @param message RedirectAttributes used to add a flash message for successful updating category
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "category/update", method = RequestMethod.POST)
     public String processUpdateCategory(@Valid @ModelAttribute Category category, Errors errors,
                                         RedirectAttributes message, Model model) {
+        // if errors are present redisplay the update category page with a flash message
         if (errors.hasErrors()) {
-            model.addAttribute("title", "IMS - Update Category");
-            model.addAttribute("subtitle", "Update Category");
-            model.addAttribute("date", format.format(new Date()));
-            model.addAttribute("categories", categoryDao.findAll());
-            model.addAttribute(message.addFlashAttribute("message", "Fields cannot be empty"));
+            message.addFlashAttribute("message", "Fields cannot be empty");
             return "redirect:/admin/category/update";
         }
-
+        // validation passed, save(update) the category, then redirect to the admin menu and display a success flash message
         categoryDao.save(category);
         message.addFlashAttribute("message", "Category Successfully Updated!");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the list of groups and for each group a form is
+     * displayed to allow them to be deleted.
+     * @param assignedGroup AssignedGroup object used to get details about all groups in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "group/delete", method = RequestMethod.GET)
     public String listDeleteGroups(@ModelAttribute AssignedGroup assignedGroup, Model model) {
         model.addAttribute("title", "IMS - Delete Group");
@@ -221,25 +310,39 @@ public class AdminController {
         return "admin/group/delete";
     }
 
+    /**
+     * This method supplies the POST request mapping to process deleting a group
+     * @param assignedGroup AssignedGroup object used to get the group to be deleted
+     * @param message RedirectAttributes used to add a flash message for successful deleting group
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "group/delete", method = RequestMethod.POST)
     public String processDeleteGroup(@ModelAttribute AssignedGroup assignedGroup,
                                      RedirectAttributes message, Model model) {
-        // TODO: 7/30/18 add delete confirmation
-        // check if any parent records exist for the group to be deleted, if any are present disallow delete and display message
-        int count = imsDao.countTicketByAssignedGroup(assignedGroup);
+        // first check if any parent records exist for the group to be deleted,
+        // if any are present disallow delete and display message
+        int count = imsDao.countTicketsByAssignedGroupEquals(assignedGroup) + userDao.countUsersByGroupIdEquals(assignedGroup);
+
+        // group is present in at least 1 ticket or user record
         if (count > 0) {
-            model.addAttribute("title", "IMS - Delete Group");
-            model.addAttribute("subtitle", "Delete Group");
-            model.addAttribute("date", format.format(new Date()));
-            model.addAttribute("groups", groupDao.findAll());
-            model.addAttribute(message.addFlashAttribute("message", "Field is in use and cannot be deleted"));
+            model.addAttribute(message.addFlashAttribute("message", "That group is in use and cannot be deleted"));
             return "redirect:/admin/group/delete";
         }
+
+        // this group is not currently being used and can be deleted, delete then redirect with success message
         groupDao.deleteById(assignedGroup.getId());
         message.addFlashAttribute("message", "Group Successfully Deleted!");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the list of categories and for each category a form is
+     * displayed to allow them to be deleted.
+     * @param category Category object to get details of all categories in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "category/delete", method = RequestMethod.GET)
     public String listDeleteCategories(@ModelAttribute Category category, Model model) {
         model.addAttribute("title", "IMS - Delete Category");
@@ -249,6 +352,13 @@ public class AdminController {
         return "admin/category/delete";
     }
 
+    /**
+     * This method supplies the POST request mapping to process deleting a category
+     * @param category Category object used to get details of category being deleted
+     * @param message RedirectAttributes used to add a flash message for successful deleting category
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "category/delete", method = RequestMethod.POST)
     public String processDeleteCategory(@ModelAttribute Category category, RedirectAttributes message, Model model) {
         // TODO: 7/30/18 add delete confirmation
@@ -268,6 +378,13 @@ public class AdminController {
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the list of severities and for each severity a form is
+     * displayed to allow them to be deleted.
+     * @param severity Severity object to get details of all severities in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "severity/delete", method = RequestMethod.GET)
     public String listDeleteSeverities(@ModelAttribute Severity severity, Model model) {
         model.addAttribute("title", "IMS - Delete Severity");
@@ -277,6 +394,13 @@ public class AdminController {
         return "admin/severity/delete";
     }
 
+    /**
+     * This method supplies the POST request mapping to process deleting a severity
+     * @param severity Severity object used to get details of severity being deleted
+     * @param message RedirectAttributes used to add a flash message for successful deleting severity
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "severity/delete", method = RequestMethod.POST)
     public String processDeleteSeverity(@ModelAttribute Severity severity, RedirectAttributes message, Model model) {
         // TODO: 7/30/18 add delete confirmation
@@ -295,6 +419,11 @@ public class AdminController {
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the add user form
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "user/add", method = RequestMethod.GET)
     public String displayAddUser(Model model) {
         model.addAttribute("title", "IMS - Add User");
@@ -307,10 +436,18 @@ public class AdminController {
         return "admin/user/add";
     }
 
+    /**
+     * This method supplies the POST request mapping to process adding a user
+     * @param user User object to get details of user being added
+     * @param errors Errors on validating user input
+     * @param message RedirectAttributes used to add a flash message for successful adding user
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "user/add", method = RequestMethod.POST)
     public String processAddUser(@Valid @ModelAttribute("user") User user, Errors errors,
                                  RedirectAttributes message, Model model) {
-
+        // if errors are present add the required attributes
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add User");
             model.addAttribute("subtitle", "Add User");
@@ -321,8 +458,6 @@ public class AdminController {
             model.addAttribute("date", format.format(new Date()));
             return "admin/user/add";
         }
-
-
 
         String plainPassword = User.createRandomPassword(24);
         //user.setPassword(BCrypt.hashpw(plainPassword, BCrypt.gensalt()));
@@ -348,6 +483,11 @@ public class AdminController {
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the add carrier form
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "carrier/add", method = RequestMethod.GET)
     public String displayAddCarrier(Model model) {
         model.addAttribute("title", "IMS - Add Carrier");
@@ -357,20 +497,36 @@ public class AdminController {
         return "admin/carrier/add";
     }
 
+    /**
+     * This method supplies the POST request mapping to process adding a carrier
+     * @param carrier Carrier object to user to create a new carrier
+     * @param errors Errors on validating user input
+     * @param model used to supply attributes to the view
+     * @param message RedirectAttributes used to add a flash message for successful adding carrier
+     * @return template view
+     */
     @RequestMapping(value = "carrier/add", method = RequestMethod.POST)
     public String processAddCarrier(@Valid @ModelAttribute("carrier") Carrier carrier, Errors errors,  Model model,
                                      RedirectAttributes message) {
+        // if errors are present add the required attributes
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add Carrier");
 
             model.addAttribute("date", format.format(new Date()));
             return "admin/carrier/add";
         }
+        // validation passed, save(add) the new carrier, then redirect to the admin menu and display a success flash message
         carrierDao.save(carrier);
         message.addFlashAttribute("message", "New carrier added successfully");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the carrier update form
+     * @param carrier Carrier object to get details about each carrier in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "carrier/update", method = RequestMethod.GET)
     public String listUpdateCarrier(@ModelAttribute Carrier carrier, Model model) {
         model.addAttribute("title", "IMS - Update Carrier");
@@ -381,9 +537,18 @@ public class AdminController {
 
     }
 
+    /**
+     * This method supplies the POST request mapping to process updating a carrier
+     * @param carrier Carrier object to get details about each carrier in the system
+     * @param errors Errors on validating user input
+     * @param message RedirectAttributes used to add a flash message for successful updating carrier
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "carrier/update", method = RequestMethod.POST)
     public String processUpdateCarrier(@Valid @ModelAttribute Carrier carrier,
                                      Errors errors, RedirectAttributes message, Model model) {
+        // if errors are present add the required attributes
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Update Carrier");
             model.addAttribute("subtitle", "Update Carrier");
@@ -392,12 +557,19 @@ public class AdminController {
             model.addAttribute(message.addFlashAttribute("message", "Field cannot be empty"));
             return "redirect:/admin/carrier/update";
         }
-
+        // validation passed, save(update) the carrier, then redirect to the admin menu and display a success flash message
         carrierDao.save(carrier);
         message.addFlashAttribute("message", "Carrier Successfully Updated!");
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the list of carriers and for each carrier a form is
+     * displayed to allow them to be deleted.
+     * @param carrier Carrier object to get details about each carrier in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "carrier/delete", method = RequestMethod.GET)
     public String listDeleteCarriers(@ModelAttribute Carrier carrier, Model model) {
         model.addAttribute("title", "IMS - Delete Carrier");
@@ -407,6 +579,13 @@ public class AdminController {
         return "admin/carrier/delete";
     }
 
+    /**
+     * This method supplies the POST request mapping to process deleting a carrier
+     * @param carrier Carrier object to get details about each carrier in the system
+     * @param message RedirectAttributes used to add a flash message for successful deleting carrier
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "carrier/delete", method = RequestMethod.POST)
     public String processDeleteCarriers(@ModelAttribute Carrier carrier,
                                      RedirectAttributes message, Model model) {
@@ -426,6 +605,12 @@ public class AdminController {
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the list of users to select a user to update
+     * @param user User object to get details about each user in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "user/list")
     public String listAllUsers(@ModelAttribute User user, Model model) {
         model.addAttribute("title", "IMS - List Users");
@@ -436,6 +621,13 @@ public class AdminController {
         return "admin/user/list";
     }
 
+    /**
+     * This method displays the GET request mapping to display the user record to be updated
+     * @param user User object to get details about the user being updated
+     * @param model used to supply attributes to the view
+     * @param id user id of user to get details of
+     * @return template view
+     */
     @RequestMapping(value = "user/update/{id}", method = RequestMethod.GET)
     public String displayUpdateUser(@ModelAttribute User user, Model model, @PathVariable int id) {
         model.addAttribute("user", userDao.findById(id));
@@ -449,11 +641,21 @@ public class AdminController {
         return "admin/user/update";
     }
 
+    /**
+     * This method supplies the POST request mapping to process updating a user.
+     * @param user User object to get details about the user being updated
+     * @param model used to supply attributes to the view
+     * @param id user id to be updated
+     * @param errors Errors on validating user input
+     * @param message RedirectAttributes used to add a flash message for successful updating user
+     * @return template view
+     */
     @RequestMapping(value = "user/update/{id}", method = RequestMethod.POST)
-    public String processUpdateUser(@ModelAttribute User user, Model model, @PathVariable int id,
-                                    Errors errors, RedirectAttributes message) {
+    public String processUpdateUser(@Valid @ModelAttribute User user, Errors errors, Model model,
+                                    @PathVariable int id, RedirectAttributes message) {
+
+        // if errors are present add the required attributes
         if (errors.hasErrors()) {
-            model.addAttribute("user", userDao.findById(id));
             model.addAttribute("title", "IMS - Update User");
             model.addAttribute("subtitle", "Update User");
             model.addAttribute("date", format.format(new Date()));
@@ -461,8 +663,9 @@ public class AdminController {
             model.addAttribute("carriers", carrierDao.findAll());
             model.addAttribute("roles", roleDao.findAll());
 
-            return "redirect:/admin/user/update/{id}";
+            return "admin/user/update";
         }
+
         User updateUser = userDao.findUserById(id);
         user.setPassword(updateUser.getPassword());
         userDao.save(user);
@@ -470,6 +673,13 @@ public class AdminController {
         return "redirect:/admin/menu";
     }
 
+    /**
+     * This method supplies the GET request mapping to display the list of users and for each user a form is displayed to
+     * allow them to be deleted.
+     * @param user User object to get details about each user in the system
+     * @param model used to supply attributes to the view
+     * @return template view
+     */
     @RequestMapping(value = "user/delete", method = RequestMethod.GET)
     public String displayUserDelete(@ModelAttribute User user, Model model) {
         model.addAttribute("title", "IMS - Delete Users");
@@ -480,8 +690,14 @@ public class AdminController {
         return "admin/user/delete";
     }
 
+    /**
+     * This method supplies the POST request mapping to process deleting a user
+     * @param id user id to be deleted
+     * @param message RedirectAttributes used to add a flash message for successful deleting user
+     * @return template view
+     */
     @RequestMapping(value = "user/delete", method = RequestMethod.POST)
-    public String processUserDelete(@ModelAttribute User user, Model model, @RequestParam int id, RedirectAttributes message) {
+    public String processUserDelete(@RequestParam int id, RedirectAttributes message) {
         userDao.deleteById(id);
         message.addFlashAttribute("message", "User successfully deleted");
         return "redirect:/admin/menu";
