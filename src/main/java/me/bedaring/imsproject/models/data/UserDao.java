@@ -34,4 +34,7 @@ public interface UserDao extends JpaRepository<User, Integer> {
     // used to perform check before deleting a group in admin controller
     int countUsersByGroupIdEquals(AssignedGroup groupId);
 
+    // check if there are any existing users with the given username or email
+    int countUsersByUsernameOrEmail(String username, String email);
+
 }

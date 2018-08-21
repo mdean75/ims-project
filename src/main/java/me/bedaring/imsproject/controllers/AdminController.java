@@ -445,7 +445,12 @@ public class AdminController {
             model.addAttribute("date", format.format(new Date()));
             return "admin/user/add";
         }
-        // TODO: 8/21/18 create checks to ensure duplicate users are not created
+        // first check to ensure there are no existing users with the supplied username or email, if so redisplay with error message
+        if (userDao.countUsersByUsernameOrEmail(user.getUsername(), user.getEmail()) > 0) {
+            message.addFlashAttribute("message", "A user already exists with that username and/or email");
+            return "redirect:/admin/user/add";
+        }
+
         // create random plain text password then encrypt before saving using BCrypt
         String plainPassword = User.createRandomPassword(24);
 
@@ -646,6 +651,18 @@ public class AdminController {
             model.addAttribute("roles", roleDao.findAll());
 
             return "admin/user/update";
+        }
+
+        // check if username or email was changed, if either were changed then check to ensure uniqueness among the other users
+        // if trying to change to an existing username or email, disallow update and redirect with error message
+        if(!user.getUsername().equals(userDao.findUserById(id).getUsername()) ||
+                !user.getEmail().equals(userDao.findUserById(id).getEmail())) {
+
+            // there can be at most 1 record with the entered credentials
+            if (userDao.countUsersByUsernameOrEmail(user.getUsername(), user.getEmail()) > 1) {
+                message.addFlashAttribute("message", "Username or email matches an existing user");
+                return "redirect:/admin/menu";
+            }
         }
 
         // add existing password to the model before saving
