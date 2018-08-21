@@ -15,20 +15,23 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface UserDao extends JpaRepository<User, Integer> {
-    //User findByUsername(String username);
-
+    // get the user that matches the given username
     Optional<User> findByUsername(String username);
 
+    // get the user that matches the given user id
     User findUserById(int id);
 
+    // custom query to use when the user wants to change their password
     @Modifying
     @Query(value = "update user set password = ?1 where id = ?2", nativeQuery = true)
     int updatePasswordById(String password, int id);
 
+    // custom query to use to update the mobile phone number and carrier
     @Modifying
     @Query(value = "update user set phone = ?1, carrier_id_id = ?2 where id = ?3", nativeQuery = true)
     int updatePhoneById(String phone, int carrierId, int id);
 
+    // get a count of all users that match the giver carrier
     int countUserByCarrierId(Carrier carrier);
 
     // used to perform check before deleting a group in admin controller
