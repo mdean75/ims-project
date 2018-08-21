@@ -18,7 +18,7 @@ import java.util.Date;
 
 /**
  * @author Michael DeAngelo
- * last update date: Aug 18, 2018
+ * last update date: Aug 20, 2018
  * purpose: Controller class for the admin features.
  */
 @Controller
@@ -361,18 +361,14 @@ public class AdminController {
      */
     @RequestMapping(value = "category/delete", method = RequestMethod.POST)
     public String processDeleteCategory(@ModelAttribute Category category, RedirectAttributes message, Model model) {
-        // TODO: 7/30/18 add delete confirmation
-        // check if any parent records exist for the category to be deleted, if any are present disallow delete and display message
 
+        // check if any parent records exist for the category to be deleted, if any are present disallow delete and display message
         int count = imsDao.countTicketByCategory(category);
         if (count > 0) {
-            model.addAttribute("title", "IMS - Delete Category");
-            model.addAttribute("subtitle", "Delete Category");
-            model.addAttribute("date", format.format(new Date()));
-            model.addAttribute("categories", categoryDao.findAll());
-            model.addAttribute(message.addFlashAttribute("message", "Field is in use and cannot be deleted"));
+            message.addFlashAttribute("message", "That category is in use and cannot be deleted");
             return "redirect:/admin/category/delete";
         }
+        // this category is not currently being used and can be deleted, delete then redirect with success message
         categoryDao.deleteById(category.getId());
         message.addFlashAttribute("message", "Category Successfully Deleted!");
         return "redirect:/admin/menu";
@@ -403,17 +399,13 @@ public class AdminController {
      */
     @RequestMapping(value = "severity/delete", method = RequestMethod.POST)
     public String processDeleteSeverity(@ModelAttribute Severity severity, RedirectAttributes message, Model model) {
-        // TODO: 7/30/18 add delete confirmation
         // check if any parent records exist for the severity to be deleted, if any are present disallow delete and display message
         int count = imsDao.countTicketBySeverity(severity);
         if (count > 0) {
-            model.addAttribute("title", "IMS - Delete Severity");
-            model.addAttribute("subtitle", "Delete Severity");
-            model.addAttribute("date", format.format(new Date()));
-            model.addAttribute("severities", severityDao.findAll());
-            model.addAttribute(message.addFlashAttribute("message", "Field is in use and cannot be deleted"));
+            message.addFlashAttribute("message", "That severity is in use and cannot be deleted");
             return "redirect:/admin/severity/delete";
         }
+        // this severity is not currently being used and can be deleted, delete then redirect with success message
         severityDao.deleteById(severity.getId());
         message.addFlashAttribute("message", "Severity Successfully Deleted!");
         return "redirect:/admin/menu";
@@ -447,11 +439,10 @@ public class AdminController {
     @RequestMapping(value = "user/add", method = RequestMethod.POST)
     public String processAddUser(@Valid @ModelAttribute("user") User user, Errors errors,
                                  RedirectAttributes message, Model model) {
-        // if errors are present add the required attributes
+        // if errors are present add the required attributes and redisplay
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add User");
             model.addAttribute("subtitle", "Add User");
-            //model.addAttribute("user", new User());
             model.addAttribute("carriers", carrierDao.findAll());
             model.addAttribute("groups", groupDao.findAll());
             model.addAttribute("roles", roleDao.findAll());
@@ -459,13 +450,17 @@ public class AdminController {
             return "admin/user/add";
         }
 
+        // create random plain text password then encrypt before saving using BCrypt
         String plainPassword = User.createRandomPassword(24);
-        //user.setPassword(BCrypt.hashpw(plainPassword, BCrypt.gensalt()));
 
         user.setPassword(bCryptPasswordEncoder.encode(plainPassword));
+
+        // save (create) the new user and send email to the user with their credentials, also set flash message on success
         try {
             userDao.save(user);
             message.addFlashAttribute("message", "Successfully Added New User");
+
+            // create the email
             Mail mail = new Mail();
             mail.setFrom("bedaring.me@gmail.com");
             mail.setTo(user.getEmail());
@@ -473,6 +468,7 @@ public class AdminController {
             mail.setContent("A new user account has been created for you.  Please use the following credentials " +
                     "for initial login.\n\n\t" + user.getUsername() + "\n\t" + plainPassword);
 
+            // send the email
             emailService.sendSimpleMessage(mail);
 
             message.addFlashAttribute("New user email sent");
@@ -511,7 +507,7 @@ public class AdminController {
         // if errors are present add the required attributes
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add Carrier");
-
+            model.addAttribute("subtitle", "Add Carrier");
             model.addAttribute("date", format.format(new Date()));
             return "admin/carrier/add";
         }
@@ -550,11 +546,7 @@ public class AdminController {
                                      Errors errors, RedirectAttributes message, Model model) {
         // if errors are present add the required attributes
         if (errors.hasErrors()) {
-            model.addAttribute("title", "IMS - Update Carrier");
-            model.addAttribute("subtitle", "Update Carrier");
-            model.addAttribute("date", format.format(new Date()));
-            model.addAttribute("carriers", carrierDao.findAll());
-            model.addAttribute(message.addFlashAttribute("message", "Field cannot be empty"));
+            message.addFlashAttribute("message", "Carrier Name and domain cannot be empty");
             return "redirect:/admin/carrier/update";
         }
         // validation passed, save(update) the carrier, then redirect to the admin menu and display a success flash message
@@ -589,17 +581,13 @@ public class AdminController {
     @RequestMapping(value = "carrier/delete", method = RequestMethod.POST)
     public String processDeleteCarriers(@ModelAttribute Carrier carrier,
                                      RedirectAttributes message, Model model) {
-        // TODO: 7/30/18 add delete confirmation
         // check if any parent records exist for the group to be deleted, if any are present disallow delete and display message
         int count = userDao.countUserByCarrierId(carrier);
         if (count > 0) {
-            model.addAttribute("title", "IMS - Delete Carrier");
-            model.addAttribute("subtitle", "Delete Carrier");
-            model.addAttribute("date", format.format(new Date()));
-            model.addAttribute("carriers", carrierDao.findAll());
-            model.addAttribute(message.addFlashAttribute("message", "Field is in use and cannot be deleted"));
+            message.addFlashAttribute("message", "That carrier is in use and cannot be deleted");
             return "redirect:/admin/carrier/delete";
         }
+        // this carrier is not currently being used and can be deleted, delete then redirect with success message
         carrierDao.deleteById(carrier.getId());
         message.addFlashAttribute("message", "Carrier Successfully Deleted!");
         return "redirect:/admin/menu";
@@ -666,8 +654,11 @@ public class AdminController {
             return "admin/user/update";
         }
 
+        // add existing password to the model before saving
         User updateUser = userDao.findUserById(id);
         user.setPassword(updateUser.getPassword());
+
+        // save (update) the user then redirect with success message
         userDao.save(user);
         message.addFlashAttribute("message", "User successfully updated");
         return "redirect:/admin/menu";
@@ -698,6 +689,7 @@ public class AdminController {
      */
     @RequestMapping(value = "user/delete", method = RequestMethod.POST)
     public String processUserDelete(@RequestParam int id, RedirectAttributes message) {
+        // TODO: 8/20/18 get count of user assigned to tickets and do not allow if any records are assigned to this user
         userDao.deleteById(id);
         message.addFlashAttribute("message", "User successfully deleted");
         return "redirect:/admin/menu";

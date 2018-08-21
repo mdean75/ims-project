@@ -21,6 +21,8 @@ public interface ImsDao extends CrudRepository<Ticket, Integer> {
     @Query(value = "select count(id) from ticket where assigned_group_id = ?1", nativeQuery = true)
     int countTicketByAssignedGroup(AssignedGroup assignedGroup);
 
+    int countTicketsByAssignedGroupEquals(AssignedGroup assignedGroup);
+
     List<Ticket> findAllByAssignedPersonId(int id);
 
     List<Ticket> findAllByAssignedGroupId(int id);

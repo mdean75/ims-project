@@ -12,8 +12,4 @@ import javax.transaction.Transactional;
 @Transactional
 public interface SeverityDao extends CrudRepository<Severity, Integer> {
 
-    @Modifying
-    @Query(value = "update severity set severity_name = ?1 where id = ?2", nativeQuery = true)
-    int update(String severityName, int id);
-
 }

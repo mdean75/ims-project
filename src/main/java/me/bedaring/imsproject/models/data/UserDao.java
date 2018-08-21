@@ -1,5 +1,6 @@
 package me.bedaring.imsproject.models.data;
 
+import me.bedaring.imsproject.models.AssignedGroup;
 import me.bedaring.imsproject.models.Carrier;
 import me.bedaring.imsproject.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +30,8 @@ public interface UserDao extends JpaRepository<User, Integer> {
     int updatePhoneById(String phone, int carrierId, int id);
 
     int countUserByCarrierId(Carrier carrier);
+
+    // used to perform check before deleting a group in admin controller
+    int countUsersByGroupIdEquals(AssignedGroup groupId);
+
 }
