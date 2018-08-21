@@ -260,4 +260,8 @@ public class Ticket {
     public void setAssignedPerson(Optional<User> user) {
 
     }
+
+    public void setStatus(int statusId) {
+
+    }
 }

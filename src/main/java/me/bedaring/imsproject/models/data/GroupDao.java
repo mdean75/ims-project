@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 @Transactional
 public interface GroupDao extends CrudRepository<AssignedGroup, Integer> {
-    AssignedGroup findById(AssignedGroup groupId);
 
+    // get all groups sorted by name
     List<AssignedGroup> findAllByOrderByGroupName();
 }
