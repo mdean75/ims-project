@@ -131,7 +131,7 @@ public class AdminController {
     @RequestMapping(value = "severity/add", method = RequestMethod.POST)
     public String processAddSeverity(@Valid @ModelAttribute("severity") Severity severity, Errors errors,  Model model,
                                      RedirectAttributes message) {
-        // if errors are present add the required attributes
+        // if errors are present add the required attributes and redisplay
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add Severity");
             model.addAttribute("subtitle", "Add Severity");
@@ -151,6 +151,7 @@ public class AdminController {
      */
     @RequestMapping(value = "category/add", method = RequestMethod.GET)
     public String displayAddCategory(Model model) {
+        // TODO: 8/21/18 change category type to a select box
         model.addAttribute("title", "IMS - Add Category");
         model.addAttribute("subtitle", "Add Category");
         model.addAttribute("date", format.format(new Date()));
@@ -169,7 +170,7 @@ public class AdminController {
     @RequestMapping(value = "category/add", method = RequestMethod.POST)
     public String processAddCategory(@Valid @ModelAttribute("category") Category category, Errors errors, Model model,
                                      RedirectAttributes message) {
-        // if errors are present add the required attributes
+        // if errors are present add the required attributes and redisplay
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add Category");
             model.addAttribute("subtitle", "Add Category");
@@ -194,8 +195,7 @@ public class AdminController {
         model.addAttribute("title", "IMS - Update Group");
         model.addAttribute("subtitle", "Update Group");
         model.addAttribute("date", format.format(new Date()));
-        // TODO: 8/20/18 change to sort the list
-        model.addAttribute("groups", groupDao.findAll());
+        model.addAttribute("groups", groupDao.findAllByOrderByGroupName());
         return "admin/group/update";
 
     }
@@ -277,15 +277,14 @@ public class AdminController {
      * @param category Category object used to update the given category
      * @param errors Errors on validating user input
      * @param message RedirectAttributes used to add a flash message for successful updating category
-     * @param model used to supply attributes to the view
      * @return template view
      */
     @RequestMapping(value = "category/update", method = RequestMethod.POST)
     public String processUpdateCategory(@Valid @ModelAttribute Category category, Errors errors,
-                                        RedirectAttributes message, Model model) {
+                                        RedirectAttributes message) {
         // if errors are present redisplay the update category page with a flash message
         if (errors.hasErrors()) {
-            message.addFlashAttribute("message", "Fields cannot be empty");
+            message.addFlashAttribute("message", "Name and Type are both required");
             return "redirect:/admin/category/update";
         }
         // validation passed, save(update) the category, then redirect to the admin menu and display a success flash message
@@ -326,7 +325,7 @@ public class AdminController {
 
         // group is present in at least 1 ticket or user record
         if (count > 0) {
-            model.addAttribute(message.addFlashAttribute("message", "That group is in use and cannot be deleted"));
+            model.addAttribute(message.addFlashAttribute("message", "Selected group is in use and cannot be deleted"));
             return "redirect:/admin/group/delete";
         }
 
@@ -365,7 +364,7 @@ public class AdminController {
         // check if any parent records exist for the category to be deleted, if any are present disallow delete and display message
         int count = imsDao.countTicketByCategory(category);
         if (count > 0) {
-            message.addFlashAttribute("message", "That category is in use and cannot be deleted");
+            message.addFlashAttribute("message", "Selected category is in use and cannot be deleted");
             return "redirect:/admin/category/delete";
         }
         // this category is not currently being used and can be deleted, delete then redirect with success message
@@ -402,7 +401,7 @@ public class AdminController {
         // check if any parent records exist for the severity to be deleted, if any are present disallow delete and display message
         int count = imsDao.countTicketBySeverity(severity);
         if (count > 0) {
-            message.addFlashAttribute("message", "That severity is in use and cannot be deleted");
+            message.addFlashAttribute("message", "Selected severity is in use and cannot be deleted");
             return "redirect:/admin/severity/delete";
         }
         // this severity is not currently being used and can be deleted, delete then redirect with success message
@@ -449,7 +448,7 @@ public class AdminController {
             model.addAttribute("date", format.format(new Date()));
             return "admin/user/add";
         }
-
+        // TODO: 8/21/18 create checks to ensure duplicate users are not created
         // create random plain text password then encrypt before saving using BCrypt
         String plainPassword = User.createRandomPassword(24);
 
@@ -458,7 +457,6 @@ public class AdminController {
         // save (create) the new user and send email to the user with their credentials, also set flash message on success
         try {
             userDao.save(user);
-            message.addFlashAttribute("message", "Successfully Added New User");
 
             // create the email
             Mail mail = new Mail();
@@ -471,9 +469,10 @@ public class AdminController {
             // send the email
             emailService.sendSimpleMessage(mail);
 
-            message.addFlashAttribute("New user email sent");
+            message.addFlashAttribute("message", "Successfully Added New User");
         } catch (ConstraintViolationException e) {
             System.out.println("there was a constraint error: " + e.getConstraintViolations());
+            message.addFlashAttribute("message", "Error creating new user");
         }
 
         return "redirect:/admin/menu";
@@ -504,6 +503,7 @@ public class AdminController {
     @RequestMapping(value = "carrier/add", method = RequestMethod.POST)
     public String processAddCarrier(@Valid @ModelAttribute("carrier") Carrier carrier, Errors errors,  Model model,
                                      RedirectAttributes message) {
+        // TODO: 8/21/18 add validation to the Carrier class and check for empty number or carrier id = 0
         // if errors are present add the required attributes
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add Carrier");
