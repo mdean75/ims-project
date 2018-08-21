@@ -501,7 +501,6 @@ public class AdminController {
     @RequestMapping(value = "carrier/add", method = RequestMethod.POST)
     public String processAddCarrier(@Valid @ModelAttribute("carrier") Carrier carrier, Errors errors,  Model model,
                                      RedirectAttributes message) {
-        // TODO: 8/21/18 add validation to the Carrier class and check for empty number or carrier id = 0
         // if errors are present add the required attributes
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add Carrier");
@@ -543,7 +542,7 @@ public class AdminController {
                                      Errors errors, RedirectAttributes message) {
         // if errors are present add the required attributes
         if (errors.hasErrors()) {
-            message.addFlashAttribute("message", "Carrier Name and domain cannot be empty");
+            message.addFlashAttribute("message", "Carrier Name and domain are both required");
             return "redirect:/admin/carrier/update";
         }
         // validation passed, save(update) the carrier, then redirect to the admin menu and display a success flash message

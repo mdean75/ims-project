@@ -1,6 +1,8 @@
 package me.bedaring.imsproject.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +13,12 @@ public class Carrier {
     @GeneratedValue
     private int id;
 
+    @NotNull
+    @Size(min = 1, message = "Name is required")
     private String carrierName;
 
+    @NotNull
+    @Size(min = 1, message = "Domain is required")
     private String carrierDomain;
 
     @OneToMany
