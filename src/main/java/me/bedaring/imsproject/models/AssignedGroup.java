@@ -6,6 +6,12 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Michael DeAngelo
+ * last update date: Aug 21, 2018
+ * purpose: This class defines the group that users are assigned to.  It it used to group users into functional units
+ * or teams.
+ */
 @Entity
 public class AssignedGroup {
 
@@ -17,52 +23,27 @@ public class AssignedGroup {
     @Size(min = 1, message = "Required field")
     private String groupName;
 
-    @OneToMany
-    @JoinColumn(name = "group_id")
-    private List<Ticket> tickets = new ArrayList<>();
+    // constructor
+    public AssignedGroup() { }
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<User> groupUsers = new ArrayList<>();
 
-    @Transient
-    private List<AssignedGroup> allGroups = new ArrayList<>();
-
-    public AssignedGroup() {
-    }
-
-    public AssignedGroup(String groupName) {
-        this.groupName = groupName;
-    }
+    // follows are the accessor and modifier methods
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getGroupName() {
         return groupName;
-    }
-
-    public List<AssignedGroup> returnGroups() {
-        return allGroups;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
     }
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 
-    public List<User> getGroupUsers() {
-        return groupUsers;
-    }
-
-    public void setGroupUsers(List<User> groupUsers) {
-        this.groupUsers = groupUsers;
-    }
 }
 
