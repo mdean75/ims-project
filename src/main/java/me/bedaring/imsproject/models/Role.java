@@ -34,6 +34,8 @@ public class Role {
     public Role() {
     }
 
+    // follows are the accessor and modifier methods
+
     public int getRoleId() {
         return roleId;
     }

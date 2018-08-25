@@ -6,6 +6,11 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Michael DeAngelo
+ * last updated date: August 25, 2018
+ * purpose: This class defines the object to assign a severity to an incident ticket.
+ */
 @Entity
 public class Severity {
 
@@ -17,45 +22,26 @@ public class Severity {
     @Size(min = 1, message = "Name cannot be empty")
     private String severityName;
 
-    @OneToMany
-    @JoinColumn(name = "severity_id")
-    private List<Ticket> severityTickets = new ArrayList<>();
-
-    @Transient
-    private List<Severity> allSeverities = new ArrayList<>();
-
+    // constructor
     public Severity() {
     }
 
-    public Severity(@NotNull String severityName) {
-        this.severityName = severityName;
-    }
+    // follows are the accessor and modifier methods
 
     public int getId() {
-        return id;
-    }
-
-    public String getSeverityName() {
-        return severityName;
-    }
-
-    public void setSeverityName(String severityName) {
-        this.severityName = severityName;
-    }
-
-    public List<Ticket> getTickets() {
-        return severityTickets;
+        return this.id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public List<Severity> returnGroups() {
-        return allSeverities;
+    public String getSeverityName() {
+        return this.severityName;
     }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.severityTickets = tickets;
+    public void setSeverityName(String severityName) {
+        this.severityName = severityName;
     }
+
 }
