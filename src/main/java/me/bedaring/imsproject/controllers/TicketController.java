@@ -266,7 +266,8 @@ public class TicketController {
      * @return view template
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public String processCreateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors, Model model) {
+    public String processCreateTicket(@ModelAttribute @Valid Ticket newTicket, Errors errors,
+                                      Model model, RedirectAttributes message) {
 
         if(errors.hasErrors()) {
             model.addAttribute("title", "IMS - Create Ticket");
@@ -280,7 +281,10 @@ public class TicketController {
             return "ticket/create";
         }
 
-        imsDao.save(newTicket);
+        // save new ticket and assign to variable so we can get the ID to display in the success message
+        Ticket insertedTicket = imsDao.save(newTicket);
+
+        message.addFlashAttribute("message", "New ticket number " + insertedTicket.getId() + " successfully created");
         return "redirect:/ticket/main";
     }
 }
