@@ -42,6 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf().disable()
                 .authorizeRequests()
+                // allow all access to css, js, images, error pages, and the index page
                     .antMatchers("/css/**").permitAll()
                     .antMatchers("/js/**").permitAll()
                     .antMatchers("/images/**").permitAll()
@@ -52,17 +53,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                     .antMatchers("/").permitAll()
 
+                // allow all authenticated users to access the following
                     .antMatchers("/profile").authenticated()
 
                     .antMatchers("/ticket/main").authenticated()
 
+                    .antMatchers("/ticket/list").authenticated()
+                    .antMatchers("/ticket/list/1").authenticated()
+
+                // require user or support to access these pages
                     .antMatchers("/ticket/view/**").hasAnyRole("USER", "SUPPORT")
                     .antMatchers("/ticket/create").hasAnyRole("USER", "SUPPORT")
 
-                    .antMatchers("/ticket/list").authenticated()
-                    .antMatchers("/ticket/list/1").authenticated()
+                // require support role to have access to all tickets
                     .antMatchers("/ticket/list/2").hasAnyRole("SUPPORT")
 
+                // require admin role to have access to any of the admin pages
                     .antMatchers("/admin/**").hasRole("ADMIN")
 
                 .anyRequest().authenticated()
@@ -71,11 +77,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .formLogin()
 
+                // landing page after successful login for all users
                 .defaultSuccessUrl("/ticket/main")
                     .permitAll()
                     .and()
                 .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+
+                // after successful logout redirect to index page
                     .logoutSuccessUrl("/");
     }
 }
