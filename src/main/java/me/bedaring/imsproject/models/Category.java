@@ -6,6 +6,11 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Michael DeAngelo
+ * last update date: August 25, 2018
+ * purpose: This class defines the category object that is used to categorize incident tickets.
+ */
 @Entity
 public class Category {
 
@@ -21,17 +26,11 @@ public class Category {
     @Size(min = 1, message = "Type cannot be empty")
     private String categoryType;
 
-    @OneToMany
-    @JoinColumn(name = "category_id")
-    private List<Ticket> catTickets = new ArrayList<>();
-
+    // constructor
     public Category() {
     }
 
-    public Category(@NotNull String categoryName, @NotNull String categoryType) {
-        this.categoryName = categoryName;
-        this.categoryType = categoryType;
-    }
+    // follows are the accessor and modifier methods
 
     public int getId() {
         return id;
@@ -42,7 +41,7 @@ public class Category {
     }
 
     public String getCategoryName() {
-        return categoryName;
+        return this.categoryName;
     }
 
     public void setCategoryName(String categoryName) {
@@ -57,11 +56,5 @@ public class Category {
         this.categoryType = categoryType;
     }
 
-    public List<Ticket> getCatTickets() {
-        return catTickets;
-    }
 
-    public void setCatTickets(List<Ticket> catTickets) {
-        this.catTickets = catTickets;
-    }
 }
