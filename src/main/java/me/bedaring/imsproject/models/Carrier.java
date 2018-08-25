@@ -6,6 +6,11 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Michael DeAngelo
+ * last update date: Aug 21, 2018
+ * purpose: This class defines the carrier object that is used for the sms messaging
+ */
 @Entity
 public class Carrier {
 
@@ -21,12 +26,11 @@ public class Carrier {
     @Size(min = 1, message = "Domain is required")
     private String carrierDomain;
 
-    @OneToMany
-    @JoinColumn(name = "carrier_id")
-    private List<User> carrierUsers = new ArrayList<>();
-
+    // constructor
     public Carrier() {
     }
+
+    // following are the accessor and modifier methods
 
     public int getId() {
         return id;
@@ -44,14 +48,6 @@ public class Carrier {
         this.carrierName = carrierName;
     }
 
-    public List<User> getCarrierUsers() {
-        return carrierUsers;
-    }
-
-    public void setCarrierUsers(List<User> carrierUsers) {
-        this.carrierUsers = carrierUsers;
-    }
-
     public String getCarrierDomain() {
         return carrierDomain;
     }
@@ -59,4 +55,5 @@ public class Carrier {
     public void setCarrierDomain(String carrierDomain) {
         this.carrierDomain = carrierDomain;
     }
+
 }
