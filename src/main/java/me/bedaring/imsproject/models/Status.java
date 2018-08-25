@@ -20,10 +20,6 @@ public class Status {
     @NotNull
     private String statusName;
 
-    @OneToMany
-    @JoinColumn(name = "status_id")
-    private List<Ticket> ticketStatus = new ArrayList<>();
-
     // constructor
     public Status() {
     }
@@ -46,11 +42,4 @@ public class Status {
         this.statusName = statusName;
     }
 
-    public List<Ticket> getTicketStatus() {
-        return this.ticketStatus;
-    }
-
-    public void setTicketStatus(List<Ticket> ticketStatus) {
-        this.ticketStatus = ticketStatus;
-    }
 }

@@ -33,7 +33,7 @@ public class Category {
     // follows are the accessor and modifier methods
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -49,12 +49,11 @@ public class Category {
     }
 
     public String getCategoryType() {
-        return categoryType;
+        return this.categoryType;
     }
 
     public void setCategoryType(String categoryType) {
         this.categoryType = categoryType;
     }
-
 
 }

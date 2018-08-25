@@ -2,14 +2,17 @@ package me.bedaring.imsproject.models;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 import java.util.Set;
 
+/**
+ * @author Michael DeAngelo
+ * last updated date: August 25, 2018
+ * purpose: This class defines the User object and used to get details about the system users.
+ */
 @Entity
 @DynamicUpdate(value = true)
 @Table(name = "user")
@@ -46,10 +49,12 @@ public class User {
 
     private String phone;
 
+    // only used when user is changing their password, not stored in the database, this is the new password
     @Transient
     @Size(min=1, message = "Field cannot be empty")
     private String newPassword;
 
+    // only used when user is changing their password, not stored in the database, this the to verify the new password
     @Transient
     @Size(min=1, message = "Field cannot be empty")
     private String verifyPassword;
@@ -62,6 +67,7 @@ public class User {
 
     private int active;
 
+    // used to get the roles for the given user
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -72,25 +78,29 @@ public class User {
     private Set<Role> roles;
 
 
+    // default constructor
     public User() {
     }
 
+    // copy constructor used to get details of the current user
     public User(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.phone = user.getPhone();
+        this.groupId = user.getGroupId();
         this.carrierId = user.getCarrierId();
         this.active = user.getActive();
         this.roles = user.getRoles();
-        this.id = user.getId();
-        this.groupId = user.getGroupId();
     }
 
+    // follows are the accessor and modifier methods
+
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -98,7 +108,7 @@ public class User {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -106,7 +116,7 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {
@@ -114,7 +124,7 @@ public class User {
     }
 
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
     public void setFirstName(String firstName) {
@@ -122,7 +132,7 @@ public class User {
     }
 
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {
@@ -130,7 +140,7 @@ public class User {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -138,47 +148,48 @@ public class User {
     }
 
     public String getPhone() {
-        return phone;
+        return this.phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public Carrier getCarrierId() {
-        return carrierId;
-    }
-
-    public void setCarrierId(Carrier carrierId) {
-        this.carrierId = carrierId;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
-
     public AssignedGroup getGroupId() {
-        return groupId;
+        return this.groupId;
     }
 
     public void setGroupId(AssignedGroup groupId) {
         this.groupId = groupId;
     }
 
+    public Carrier getCarrierId() {
+        return this.carrierId;
+    }
+
+    public void setCarrierId(Carrier carrierId) {
+        this.carrierId = carrierId;
+    }
+
+    public int getActive() {
+        return this.active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
     public String getNewPassword() {
-        return newPassword;
+        return this.newPassword;
     }
 
     public void setNewPassword(String newPassword) {
@@ -186,48 +197,23 @@ public class User {
     }
 
     public String getVerifyPassword() {
-        return verifyPassword;
+        return this.verifyPassword;
     }
 
     public void setVerifyPassword(String verifyPassword) {
         this.verifyPassword = verifyPassword;
     }
 
+    /**
+     * This method takes an integer length and returns a random password using alpha-numeric characters
+     * @param length length of the desired new password
+     * @return String the new random password
+     */
     public static String createRandomPassword(int length){
-        // create hashed password
+        // set the characters to use and create and return the new random password
+
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        String password = RandomStringUtils.random(length, characters);
-
-        System.out.println(password);
-
-        System.out.println(BCrypt.hashpw(password, BCrypt.gensalt()));
-
-
-        return password;
+        return RandomStringUtils.random(length, characters);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return getId() == user.getId() &&
-                getActive() == user.getActive() &&
-                Objects.equals(getUsername(), user.getUsername()) &&
-                Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getFirstName(), user.getFirstName()) &&
-                Objects.equals(getLastName(), user.getLastName()) &&
-                Objects.equals(getEmail(), user.getEmail()) &&
-                Objects.equals(getPhone(), user.getPhone()) &&
-                Objects.equals(getNewPassword(), user.getNewPassword()) &&
-                Objects.equals(getVerifyPassword(), user.getVerifyPassword()) &&
-                Objects.equals(getGroupId(), user.getGroupId()) &&
-                Objects.equals(getCarrierId(), user.getCarrierId()) &&
-                Objects.equals(getRoles(), user.getRoles());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getPassword(), getFirstName(), getLastName(), getEmail(), getPhone(), getNewPassword(), getVerifyPassword(), getGroupId(), getCarrierId(), getActive(), getRoles());
-    }
 }

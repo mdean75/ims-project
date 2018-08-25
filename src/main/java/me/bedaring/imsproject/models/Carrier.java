@@ -30,10 +30,10 @@ public class Carrier {
     public Carrier() {
     }
 
-    // following are the accessor and modifier methods
+    // following is the accessor and modifier methods
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -41,7 +41,7 @@ public class Carrier {
     }
 
     public String getCarrierName() {
-        return carrierName;
+        return this.carrierName;
     }
 
     public void setCarrierName(String carrierName) {
@@ -49,7 +49,7 @@ public class Carrier {
     }
 
     public String getCarrierDomain() {
-        return carrierDomain;
+        return this.carrierDomain;
     }
 
     public void setCarrierDomain(String carrierDomain) {

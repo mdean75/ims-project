@@ -22,6 +22,10 @@ public class Severity {
     @Size(min = 1, message = "Name cannot be empty")
     private String severityName;
 
+    @OneToMany
+    @JoinColumn(name = "severity_id")
+    private List<Ticket> severityTickets = new ArrayList<>();
+
     // constructor
     public Severity() {
     }
@@ -44,4 +48,11 @@ public class Severity {
         this.severityName = severityName;
     }
 
+    public List<Ticket> getTickets() {
+        return this.severityTickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.severityTickets = tickets;
+    }
 }

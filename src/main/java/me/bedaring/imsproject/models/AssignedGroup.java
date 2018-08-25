@@ -26,11 +26,10 @@ public class AssignedGroup {
     // constructor
     public AssignedGroup() { }
 
-
     // follows are the accessor and modifier methods
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -38,7 +37,7 @@ public class AssignedGroup {
     }
 
     public String getGroupName() {
-        return groupName;
+        return this.groupName;
     }
 
     public void setGroupName(String groupName) {
