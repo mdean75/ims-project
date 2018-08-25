@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * @author Michael DeAngelo
+ * last updated date: August 25, 2018
+ * purpose: This class is used to implement database based user roles.
+ */
 @Entity
 @Table(name = "role")
 public class Role {
@@ -16,8 +21,6 @@ public class Role {
     @Column(name = "role")
     private String role;
 
-
-
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_role",
@@ -27,6 +30,7 @@ public class Role {
                     name = "user_id"))
     private Set<User> users;
 
+    // constructor
     public Role() {
     }
 
@@ -39,7 +43,7 @@ public class Role {
     }
 
     public String getRole() {
-        return role;
+        return this.role;
     }
 
     public void setRole(String role) {
@@ -47,7 +51,7 @@ public class Role {
     }
 
     public Set<User> getUsers() {
-        return users;
+        return this.users;
     }
 
     public void setUsers(Set<User> users) {
@@ -63,6 +67,5 @@ public class Role {
                 Objects.equals(getRole(), role1.getRole()) &&
                 Objects.equals(getUsers(), role1.getUsers());
     }
-
 
 }
