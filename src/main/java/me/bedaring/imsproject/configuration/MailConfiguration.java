@@ -12,19 +12,19 @@ import java.util.Properties;
  */
 @Configuration
 public class MailConfiguration {
-    @Value("smtp")
+    @Value("${spring.mail.protocol}")
     private String protocol;
-    @Value("smtp.gmail.com")
+    @Value("${spring.mail.host}")
     private String host;
-    @Value("587")
+    @Value("${spring.mail.port}")
     private int port;
-    @Value("true")
+    @Value("${spring.mail.properties.mail.smtp.auth}")
     private boolean auth;
-    @Value("true")
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
     private boolean starttls;
-    @Value("bedaring.me@gmail.com")
+    @Value("${spring.mail.username}")
     private String username;
-    @Value("Syd*Eli2017")
+    @Value("${spring.mail.password}")
     private String password;
 
     @Bean
