@@ -2,6 +2,7 @@ package me.bedaring.imsproject;
 
 public class Mail {
     private String from;
+    private String replyTo;
     private String to;
     private String subject;
     private String content;
@@ -22,6 +23,14 @@ public class Mail {
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    public String getReplyTo() {
+        return replyTo;
+    }
+
+    public void setReplyTo(String replyTo) {
+        this.replyTo = replyTo;
     }
 
     public String getTo() {

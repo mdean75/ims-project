@@ -55,7 +55,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 // allow all authenticated users to access the following
                     .antMatchers("/profile").authenticated()
-
+                    .antMatchers("/sms").authenticated()
                     .antMatchers("/ticket/main").authenticated()
 
                     .antMatchers("/ticket/list").authenticated()

@@ -10,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -40,4 +41,9 @@ public interface UserDao extends JpaRepository<User, Integer> {
     // check if there are any existing users with the given username or email
     int countUsersByUsernameOrEmail(String username, String email);
 
+    // get all users sorted by last name
+    List<User> findAllByOrderByLastName();
+
+    // get all users by group
+    List<User> findAllByGroupId(AssignedGroup groupId);
 }

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www/thymeleaf.org">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8" />
+    <title>Incident Management System Create Ticket</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+<body>
+<div class="container" id="top">
+    <nav th:replace="fragments :: top-nav"></nav>
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
+            <div class="card-body text-dark mb-3">
+                <h1 class="text-center">Incident Management System</h1>
+                <h2 class="text-center" th:text="${subtitle}"></h2>
+                <div class="row justify-content-center">
+                    <div class="message col-md-6">
+
+                        <p class="text-center" th:text="${date}"></p></hr>
+                        <p class="text-center" style="color: red;" th:text="${success}"></p>
+                    </div>
+
+                </div>
+                <div class="col-md-8 offset-md-2">
+                    <form method="post" th:object="${message}">
+
+                        <div class="form-row">
+                            <label><strong>Select Groups</strong></label>
+                        </div>
+                        <hr>
+                        <div class="form-row">
+                            <div class="form-group col-auto" th:each="group : ${groups}">
+                                <label th:unless="${group.id == 0}">
+                                    <input type="checkbox" th:field="*{selectedGroups}" th:value="${group.id}" />
+                                    <span th:text="${group.groupName}"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <label><strong>Select Individuals (hold down control to select multiple)</strong></label><br>
+                        </div>
+
+                        <div class="form-row">
+                            <select th:field="*{selectedUsers}"  multiple="multiple" class="form-control col">
+                                <option th:each="user : ${users}"
+                                        th:text="${user.lastName} + ', ' + ${user.firstName}"
+                                        th:value="${user.id}"></option>
+                            </select>
+
+                        </div><br />
+
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label><strong>Message</strong></label>
+                                <textarea th:field="*{smsMessage}" rows="5" class="form-control"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="margin: auto;">
+                                <input type="submit" class="btn btn-danger" value="Send Message" />
+                                <a href="/ticket/main" class="btn btn-info">Cancel </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>

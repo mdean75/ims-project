@@ -9,4 +9,5 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface CarrierDao extends CrudRepository<Carrier, Integer> {
+    Carrier findCarrierById(int id);
 }
