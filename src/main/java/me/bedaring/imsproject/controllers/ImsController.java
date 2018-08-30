@@ -7,6 +7,8 @@ import me.bedaring.imsproject.models.data.CarrierDao;
 import me.bedaring.imsproject.models.data.GroupDao;
 import me.bedaring.imsproject.models.data.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Michael DeAngelo
@@ -197,22 +196,11 @@ public class ImsController {
         // iterate over the set of users, add each as a recipient and send the email
         Mail email = new Mail();
 
-        // used to build the to string of comma separated addresses
-        StringBuilder toAddress = new StringBuilder();
-
-        // use Iterator to iterate over the list, add the address, and add a comma and space if there is another in the list
-        Iterator<String> iterator = sms.getSendList().iterator();
-        while (iterator.hasNext()) {
-            toAddress.append(iterator.next());
-            if (iterator.hasNext()) {
-                toAddress.append(", ");
-            }
-        }
-
-        System.out.println(toAddress);
+        // copy the hash set to an array
+        String[] toAddress = sms.getSendList().toArray(new String[0]);
 
         // build the email (sms message is being sent as an email) and send
-        email.setTo(toAddress.toString());
+        email.setToMultiple(toAddress);
         email.setContent(sms.getSmsMessage());
 
         emailService.sendSimpleMessage(email);

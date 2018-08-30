@@ -22,7 +22,15 @@ public class EmailService{
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject(mail.getSubject());
         message.setText(mail.getContent());
-        message.setTo(mail.getTo());
+
+        // check if 'to' or 'toMultiple' was set (ie. sending to a single address or multiple addresses) and pass the
+        // appropriate field to 'setTo'
+        if (mail.getTo() == null) {
+            message.setTo(mail.getToMultiple());
+        } else {
+            message.setTo(mail.getTo());
+        }
+
         message.setFrom(mail.getFrom());
 
         javaMailSender.send(message);

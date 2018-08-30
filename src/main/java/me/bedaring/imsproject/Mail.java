@@ -3,7 +3,13 @@ package me.bedaring.imsproject;
 public class Mail {
     private String from;
     private String replyTo;
+
+    // used when sending to a single address
     private String to;
+
+    // used when sending to multiple addresses
+    private String[] toMultiple;
+
     private String subject;
     private String content;
 
@@ -55,5 +61,13 @@ public class Mail {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String[] getToMultiple() {
+        return toMultiple;
+    }
+
+    public void setToMultiple(String[] toMultiple) {
+        this.toMultiple = toMultiple;
     }
 }
