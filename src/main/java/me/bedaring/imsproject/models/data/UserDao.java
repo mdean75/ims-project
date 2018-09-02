@@ -46,4 +46,7 @@ public interface UserDao extends JpaRepository<User, Integer> {
 
     // get all users by group
     List<User> findAllByGroupId(AssignedGroup groupId);
+
+    // get user by token
+    Optional<User> findUserByToken(String token);
 }

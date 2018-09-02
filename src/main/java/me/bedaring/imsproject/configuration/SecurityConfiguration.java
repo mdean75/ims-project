@@ -53,6 +53,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                     .antMatchers("/").permitAll()
 
+                    .antMatchers("/profile/activate").permitAll()
+                    .antMatchers("/profile/reset-password").permitAll()
+
                 // allow all authenticated users to access the following
                     .antMatchers("/profile").authenticated()
                     .antMatchers("/sms").authenticated()

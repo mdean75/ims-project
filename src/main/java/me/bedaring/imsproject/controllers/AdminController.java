@@ -11,8 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -434,7 +437,7 @@ public class AdminController {
      */
     @RequestMapping(value = "user/add", method = RequestMethod.POST)
     public String processAddUser(@Valid @ModelAttribute("user") User user, Errors errors,
-                                 RedirectAttributes message, Model model) {
+                                 RedirectAttributes message, Model model, HttpServletRequest request) {
         // if errors are present add the required attributes and redisplay
         if (errors.hasErrors()) {
             model.addAttribute("title", "IMS - Add User");
@@ -456,6 +459,17 @@ public class AdminController {
 
         user.setPassword(bCryptPasswordEncoder.encode(plainPassword));
 
+        // create timestamp to use for token and token expiration
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        // create a new token from random string plus current timestamp and set to user timestamp field
+        String token = User.createRandomPassword(16) + timestamp.getTime();
+        user.setToken(token);
+
+        // set the token expiration for timestamp plus 24 hours then set the user token expiration
+        timestamp.setTime(timestamp.getTime() + ( (24 * 60 * 60 ) * 1000) );
+        user.setTokenExpiration(timestamp);
+
         // save (create) the new user and send email to the user with their credentials, also set flash message on success
         try {
             userDao.save(user);
@@ -465,9 +479,15 @@ public class AdminController {
             mail.setFrom("bedaring.me@gmail.com");
             mail.setTo(user.getEmail());
             mail.setSubject("New account setup");
-            mail.setContent("A new user account has been created for you.  Please use the following credentials " +
-                    "for initial login.\n\n\t" + user.getUsername() + "\n\t" + plainPassword);
+            //Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            String msg = "A new user account has been created for you with the below listed username. \n\n\t" +
+                    "username:  " + user.getUsername() + "\n\n Click on this link or copy and paste it into your " +
+                    "browser to activate your account and choose a password.  Passwords must be at least 8 characters " +
+                    "in length, contain at least 1 uppercase character, 1 lowercase character and 1 number.  " +
+                    "\n\n This is a one time use link and will expire in 24 hours.  https://" + request.getServerName() +
+                    "/profile/activate?token=" + token;
 
+            mail.setContent(msg);
             // send the email
             emailService.sendSimpleMessage(mail);
 

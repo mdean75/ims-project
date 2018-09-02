@@ -28,8 +28,9 @@
                         <p class="text-left text-success">Resolved incidents: 10</p>
                     </div>
                     -->
-
+                    <p class="text-center" style="color: red;" th:text="${message}"></p><br />
                     <h3>Please Login in to continue</h3>
+
                 </div>
                 </br>
                 <div th:if="${param.error}">
@@ -54,6 +55,29 @@
                         </div>
                     </div>
                 </form>
+
+
+                <button href="#Foo" class="btn btn-outline-primary col-md-3 offset-md-2" data-toggle="collapse">Forgot Password</button><br /><br />
+                <div id="Foo" class="collapse">
+                    <h4 class="text-center">Submit the form to reset your password</h4>
+                    <small class="col-md-10 offset-md-2">(An email with password reset instructions will be sent to the email on record)</small>
+                    <form th:action="@{/profile/reset-password}" method="post">
+                        <div class="form-row justify-content-center">
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="username" placeholder="User Name" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="email" placeholder="Email" />
+                            </div>
+                            <div class="col-md-2">
+                                <input class="btn btn-outline-secondary form-control" type="submit" value="Submit" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
             </div>
         </div>
     </div>

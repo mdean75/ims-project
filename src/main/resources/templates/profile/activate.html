@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragments :: head" >
+</head>
+<body>
+<div class="container" id="top">
+    <nav sec:authorize="isAuthenticated()" th:replace="fragments :: top-nav"></nav>
+
+
+    <div class="row justify-content-center">
+        <div class="card border-primary col-sm-8 bg-light">
+            <div class="card-body text-dark mb-3">
+                <h1 class="text-center">Incident Management System</h1>
+                <h2 class="text-center" th:text="${subtitle}"></h2>
+                <div class="row justify-content-center">
+                    <div class="message col-md-6">
+                        <p class="text-center" th:text="${date}"></p><hr />
+                    </div>
+                </div>
+
+                <div class="col-md-8 offset-md-2">
+                    <p class="text-center" style="color: red;" th:text="${message}"></p>
+
+                    <h2 th:if="${isValidToken} == false"> Either token is invalid or expired, go to login page to request a new one</h2>
+
+                    <form th:if="${isValidToken} == true" method="post" th:object="${user}">
+
+                        <input th:type="text" th:value="${token}"  />
+
+                        <div class="form-row">
+                            <label>Complete all fields to activate your account</label>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>Username</small>
+                                <input th:type="text" class="form-control" th:field="*{username}"/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>Email</small>
+                                <input th:type="text" class="form-control" th:field="*{email}"/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>New Password</small>
+                                <input th:type="password" class="form-control" th:field="*{newPassword}"/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <small>Verify Password</small>
+                                <input th:type="password" class="form-control" th:field="*{verifyPassword}" />
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="margin: auto;" >
+                                <input type="submit" class="btn btn-danger" value="Update" />
+                                <a href="/ticket/main" class="btn btn-info">Cancel </a>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -51,12 +52,12 @@ public class User {
 
     // only used when user is changing their password, not stored in the database, this is the new password
     @Transient
-    @Size(min=1, message = "Field cannot be empty")
+    @Size(min=8, message = "Password must be at least 8 characters")
     private String newPassword;
 
     // only used when user is changing their password, not stored in the database, this the to verify the new password
     @Transient
-    @Size(min=1, message = "Field cannot be empty")
+    @Size(min=8, message = "Password must be at least 8 characters")
     private String verifyPassword;
 
     @ManyToOne
@@ -76,6 +77,16 @@ public class User {
             inverseJoinColumns = @JoinColumn(
                     name = "roles_role_id"))
     private Set<Role> roles;
+
+    // used to store the new account/reset password token string
+    private String token;
+
+    // used to store the expiration time of the token
+    private Timestamp tokenExpiration;
+
+    // used to track number of times the toke was used, max of 3 attempts for any given token to complete the action
+    // (either completing account set up or resetting the password)
+    private int tokenAttempts;
 
 
     // default constructor
@@ -204,6 +215,30 @@ public class User {
         this.verifyPassword = verifyPassword;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Timestamp getTokenExpiration() {
+        return tokenExpiration;
+    }
+
+    public void setTokenExpiration(Timestamp tokenExpiration) {
+        this.tokenExpiration = tokenExpiration;
+    }
+
+    public int getTokenAttempts() {
+        return tokenAttempts;
+    }
+
+    public void setTokenAttempts(int tokenAttempts) {
+        this.tokenAttempts = tokenAttempts;
+    }
+
     /**
      * This method takes an integer length and returns a random password using alpha-numeric characters
      * @param length length of the desired new password
@@ -215,5 +250,7 @@ public class User {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         return RandomStringUtils.random(length, characters);
     }
+
+
 
 }

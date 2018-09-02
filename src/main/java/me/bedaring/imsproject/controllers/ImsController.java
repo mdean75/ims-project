@@ -7,8 +7,6 @@ import me.bedaring.imsproject.models.data.CarrierDao;
 import me.bedaring.imsproject.models.data.GroupDao;
 import me.bedaring.imsproject.models.data.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +15,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -72,7 +73,7 @@ public class ImsController {
         model.addAttribute("date", format.format(new Date()));
         model.addAttribute("user", userDao.findById(customUserDetails.getId()));
         model.addAttribute("carriers", carrierDao.findAll());
-        return "profile";
+        return "/profile/profile";
     }
 
     /**
