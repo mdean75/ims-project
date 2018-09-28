@@ -29,7 +29,8 @@ public class Ticket {
     @Size(min=1, message = "Field cannot be empty")
     private String title;
     @NotNull
-    @Size(min=1, message = "Field cannot be empty")
+    @Column(length = 500, columnDefinition = "Text")
+    @Size(min=1, max=500, message = "Description must be between 1 and 500 characters")
     private String description;
     @ManyToOne
     private AssignedGroup assignedGroup;
